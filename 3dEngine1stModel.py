@@ -1,20 +1,21 @@
 import pygame as pg
 import numpy as np
-from colors import *
+from libraryTesting.colors import *
+
 
 
 class App:
     def __init__(self):
         pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = 1600, 900
+        self.RES = self.WIDTH, self.HEIGHT = 600, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
-        self.FPS = 600
+        self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
 
         self.angle = 0
-        self.scale = 200
-
+        self.scale = 100
+    
 
     def connect_points(self, i, j, points):
         pg.draw.line(self.screen, BLACK, (points[i][0], points[i][1]), (points[j][0], points[j][1]))
@@ -69,14 +70,15 @@ class App:
 
 
     def draw(self):
-        self.angle = pg.mouse.get_pos()[0] / 1000
+        # self.angle = pg.mouse.get_pos()[0] / 1000
+        self.angle += 0.01
         self.screen.fill(WHITE)
         points = [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]]
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:
-            rotated = self.rotateZ(point, pg.mouse.get_pos()[1] / 500)
-            rotated = self.rotateY(rotated, pg.mouse.get_pos()[0] / 500)
+            rotated = self.rotateZ(point, self.angle)
+            rotated = self.rotateY(rotated, self.angle)
             projected = self.project(rotated)
             x = projected[0][0] * self.scale + self.H_WIDTH
             y = projected[1][0] * self.scale + self.H_HEIGHT
@@ -88,7 +90,6 @@ class App:
             self.connect_points(p, (p+1) % 4, projected_points)
             self.connect_points(p+4, ((p+1) % 4) + 4, projected_points)
             self.connect_points(p, (p+4), projected_points) 
-
 
 
     def run(self):
