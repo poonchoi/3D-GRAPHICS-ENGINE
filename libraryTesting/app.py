@@ -6,11 +6,11 @@ from cube import Cube
 
 
 class App():
-    def __init__(self, resolution=(800, 600)):
+    def __init__(self, resolution=(800, 600), fps=60):
         pygame.init()
         self.RES = self.WIDTH, self.HEIGHT = (resolution)
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
-        self.FPS = 600
+        self.FPS = fps
         self.screen = pygame.display.set_mode(self.RES)
         self.clock = pygame.time.Clock()
 
