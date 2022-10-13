@@ -1,6 +1,6 @@
 import pygame as pg
 import numpy as np
-from libraryTesting.colors import *
+from test2.libraryTesting.colors import *
 
 
 
@@ -12,7 +12,6 @@ class App:
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
-
         self.angle = 0
         self.scale = 100
     
