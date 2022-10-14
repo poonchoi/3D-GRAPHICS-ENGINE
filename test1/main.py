@@ -7,7 +7,7 @@ import pygame as pg
 class SoftwareRender:
     def __init__(self):
         pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = 1600, 900
+        self.RES = self.WIDTH, self.HEIGHT = 600, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
