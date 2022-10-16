@@ -21,7 +21,7 @@ class App:
 
 
     def project(self, point):
-        distance = 4
+        distance = 2
         z = 1 / (distance - float(point[2][0]))
         p = np.matrix(
             [[z, 0, 0],
