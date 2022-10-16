@@ -1,6 +1,7 @@
 import pygame as pg
 import numpy as np
 from test2.libraryTesting.colors import *
+import math
 
 
 
@@ -21,16 +22,26 @@ class App:
 
 
     def project(self, point):
-        distance = 4
-        z = 1 / (distance - float(point[2][0]))
-        p = np.matrix(
-            [[z, 0, 0],
-            [0, z, 0],
-            [0, 0, 0]]
-        )
+        zfar = 10
+        znear = 1
+        fov = 60
+        a = self.WIDTH / self.HEIGHT
+        f = 1/math.tan(fov/2)
+        q = zfar/(zfar-znear)
+        p = np.matrix([
+            [a*f,0,0,0],
+            [0,f,0,0],
+            [0,0,q,1],
+            [0,0,-znear*q,0]
+        ])
         point = np.array(point)
-        projected = np.dot(p, point.reshape(3, 1))
-        projected = projected.tolist()
+        projected = np.dot(p, point.reshape(4,1))
+        projected.tolist()
+        
+
+        # point = np.array(point)
+        # projected = np.dot(p, point.reshape(3, 1))
+        # projected = projected.tolist()
         return projected
 
 
@@ -74,7 +85,7 @@ class App:
         # self.angle = pg.mouse.get_pos()[0] / 1000
         self.angle += 0.01
         self.screen.fill(WHITE)
-        points = [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]]
+        points = [[-1, -1, 1, 1], [1, -1, 1, 1], [1, 1, 1, 1], [-1, 1, 1, 1], [-1, -1, -1, 1], [1, -1, -1, 1], [1, 1, -1, 1], [-1, 1, -1, 1]]
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:

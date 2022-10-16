@@ -1,6 +1,5 @@
 import pygame as pg
 import numpy as np
-#from test2.libraryTesting.colors import *
 
 
 class App:
@@ -12,25 +11,16 @@ class App:
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
 
-    def perspective_p(self):
-        fov = 80
-        s = 1 / np.tan((fov/2)*(np.pi/180))
-        f = 5
-        n = 1
-        matrix = [
-            [s, 0, 0, 0],
-            [0, s, 0, 0],
-            [0, 0, -f/(f-n), -1],
-            [0, 0, -(f*n)/(f-n), 0]
-        ]
-        return matrix
+    def project(self, p):
+        return p[0]/-p[2], p[1]/-p[2]
 
     def draw(self):
-        points = [[-1, -1, 1, 1], [1, -1, 1, 1], [1, 1, 1, 1], [-1, 1, 1, 1], [-1, -1, -1, 1], [1, -1, -1, 1], [1, 1, -1, 1], [-1, 1, -1, 1]]
+        points = [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]]
         for i in points:
-            projected = np.dot(self.perspective_p(),i)
-            print(projected)
-            #pg.draw.circle(self.screen, (0,0,0), (x, y), 5)
+            print(i)
+            p = self.project(i)
+            print(p)
+            pg.draw.circle(self.screen, (0,0,0), (p[0], p[1]), 5)
 
     def run(self):
         while True:

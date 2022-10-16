@@ -2,4 +2,4 @@ class vec3d:
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
-        self.x = z
+        self.z = z
