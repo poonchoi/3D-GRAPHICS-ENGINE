@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame import gfxdraw
 import numpy as np
 from test2.libraryTesting.colors import *
 
@@ -9,7 +10,7 @@ class App:
         pg.init()
         self.RES = self.WIDTH, self.HEIGHT = 600, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
-        self.FPS = 60
+        self.FPS = 10000
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
         self.angle = 0
@@ -17,11 +18,11 @@ class App:
     
 
     def connect_points(self, i, j, points):
-        pg.draw.line(self.screen, BLACK, (points[i][0], points[i][1]), (points[j][0], points[j][1]))
+        pg.draw.aaline(self.screen, BLACK, (points[i][0], points[i][1]), (points[j][0], points[j][1]))
 
 
     def project(self, point):
-        distance = 2
+        distance = 6
         z = 1 / (distance - float(point[2][0]))
         p = np.matrix(
             [[z, 0, 0],
@@ -72,19 +73,20 @@ class App:
 
     def draw(self):
         # self.angle = pg.mouse.get_pos()[0] / 1000
-        self.angle += 0.01
+        self.angle += 0.001
         self.screen.fill(WHITE)
-        points = [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]]
+        points = [[-1, -1, 3], [1, -1, 3], [1, 1, 3], [-1, 1, 3], [-1, -1, -3], [1, -1, -3], [1, 1, -3], [-1, 1, -3]]
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:
-            rotated = self.rotateZ(point, self.angle)
-            rotated = self.rotateY(rotated, self.angle)
+            rotated = self.rotateY(point, self.angle+0.01)
+            rotated = self.rotateX(rotated, self.angle)
+            rotated = self.rotateZ(rotated, -self.angle)
             projected = self.project(rotated)
             x = projected[0][0] * self.scale + self.H_WIDTH
             y = projected[1][0] * self.scale + self.H_HEIGHT
-            projected_points[i] = [x, y]
-            pg.draw.circle(self.screen, BLACK, (x, y), 5)
+            projected_points[i] = x, y
+            #pg.draw.circle(self.screen, BLACK, (x, y), 5)
             i += 1
 
         
