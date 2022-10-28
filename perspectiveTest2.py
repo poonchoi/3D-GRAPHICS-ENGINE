@@ -14,7 +14,7 @@ class App:
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
         self.angle = 0
-        self.scale = 100
+        self.scale = 10
     
 
     def connect_points(self, i, j, points):
@@ -45,14 +45,14 @@ class App:
         # projected[0] *= self.WIDTH
         # projected[1] *= self.HEIGHT
         # projected[2] += 10
-        projected[0] = (projected[0]*self.WIDTH) / (2*self.WIDTH) + self.H_WIDTH
-        projected[1] = (projected[0]*self.HEIGHT) / (2*self.WIDTH) + self.H_HEIGHT
+        projected[0] = ((projected[0]*self.WIDTH) / (2*self.WIDTH) + self.H_WIDTH)
+        projected[1] = ((projected[0]*self.HEIGHT) / (2*self.WIDTH) + self.H_HEIGHT)
         return projected
 
 
     def draw(self):
         self.screen.fill(WHITE)
-        points = [[-100, -100, 100, 1], [100, -100, 100, 1], [100, 100, 100, 1], [-100, 100, 100, 1], [-100, -100, -100, 1], [100, -100, -100, 1], [100, 100, -100, 1], [-100, 100, -100, 1]]
+        points = [[-1, -1, 1, 1], [1, -1, 1, 1], [1, 1, 1, 1], [-1, 1, 1, 1], [-1, -1, -1, 1], [1, -1, -1, 1], [1, 1, -1, 1], [-1, 1, -1, 1]]
         for point in points:
             print(point)
             x, y, z = self.project(point)
