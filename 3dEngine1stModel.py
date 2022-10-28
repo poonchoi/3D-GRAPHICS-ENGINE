@@ -4,7 +4,6 @@ import numpy as np
 from test2.libraryTesting.colors import *
 
 
-
 class App:
     def __init__(self):
         pg.init()
@@ -15,6 +14,7 @@ class App:
         self.clock = pg.time.Clock()
         self.angle = 0
         self.scale = 100
+        self.distance = 10
     
 
     def connect_points(self, i, j, points):
@@ -22,8 +22,7 @@ class App:
 
 
     def project(self, point):
-        distance = 6
-        z = 1 / (distance - float(point[2][0]))
+        z = 1 / (float(self.distance) - point[2][0])
         p = np.matrix(
             [[z, 0, 0],
             [0, z, 0],
@@ -59,34 +58,41 @@ class App:
         return rotated
 
 
-    def rotateZ(self, x, angle):
+    def rotateZ(self, point, angle):
         rotateZ = np.matrix(
             [[np.cos(angle), np.sin(angle), 0],
             [-np.sin(angle), np.cos(angle), 0],
             [0, 0, 1]]
         )
-        x = np.array(x)
-        rotated = np.dot(rotateZ, x.reshape(3, 1))
+        point = np.array(point)
+        rotated = np.dot(rotateZ, point.reshape(3, 1))
         rotated = rotated.tolist()
         return rotated
+
+
+    def translate(self, point, vec):
+        tx, ty, tz = vec[0], vec[1], vec[2]
+        translated = [point[0][0] + tx, point[1][0] + ty, point[2][0] + tz]
+        return translated
 
 
     def draw(self):
         # self.angle = pg.mouse.get_pos()[0] / 1000
         self.angle += 0.001
         self.screen.fill(WHITE)
-        points = [[-1, -1, 3], [1, -1, 3], [1, 1, 3], [-1, 1, 3], [-1, -1, -3], [1, -1, -3], [1, 1, -3], [-1, 1, -3]]
+        points = [[3, -1, 3], [5, -1, 3], [5, 1, 3], [3, 1, 3], [3, -1, -3], [5, -1, -3], [5, 1, -3], [3, 1, -3], [0,0,0],
+        [-1,1, 1],[1,1, 1],[-1,-1, 1],[1,-1, 1],[-1,1,-1],[1,1,-1],[-1,-1,-1],[1,-1,-1]]
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:
             rotated = self.rotateY(point, self.angle+0.01)
             rotated = self.rotateX(rotated, self.angle)
-            rotated = self.rotateZ(rotated, -self.angle)
+            rotated = self.translate(rotated, [1, 3, 5])
             projected = self.project(rotated)
             x = projected[0][0] * self.scale + self.H_WIDTH
             y = projected[1][0] * self.scale + self.H_HEIGHT
             projected_points[i] = x, y
-            #pg.draw.circle(self.screen, BLACK, (x, y), 5)
+            pg.draw.circle(self.screen, BLACK, (x, y), 2)
             i += 1
 
         
