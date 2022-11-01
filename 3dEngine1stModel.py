@@ -9,12 +9,12 @@ class App:
         pg.init()
         self.RES = self.WIDTH, self.HEIGHT = 600, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
-        self.FPS = 10000
+        self.FPS = 100
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
         self.angle = 0
         self.scale = 100
-        self.distance = 10
+        self.distance = 12
     
 
     def connect_points(self, i, j, points):
@@ -22,7 +22,7 @@ class App:
 
 
     def project(self, point):
-        z = 1 / (float(self.distance) - point[2][0])
+        z = 1 / (float(self.distance) - point[2])
         p = np.matrix(
             [[z, 0, 0],
             [0, z, 0],
@@ -31,7 +31,7 @@ class App:
         point = np.array(point)
         projected = np.dot(p, point.reshape(3, 1))
         projected = projected.tolist()
-        return projected
+        return [projected[0][0],projected[1][0],projected[2][0]] 
 
 
     def rotateX(self, point, angle):
@@ -43,7 +43,7 @@ class App:
         point = np.array(point)
         rotated = np.dot(rotateX, point.reshape(3, 1))
         rotated = rotated.tolist()
-        return rotated
+        return [rotated[0][0],rotated[1][0],rotated[2][0]]  
 
 
     def rotateY(self, point, angle):
@@ -55,7 +55,7 @@ class App:
         point = np.array(point)
         rotated = np.dot(rotateY, point.reshape(3, 1))
         rotated = rotated.tolist()
-        return rotated
+        return [rotated[0][0],rotated[1][0],rotated[2][0]] 
 
 
     def rotateZ(self, point, angle):
@@ -67,30 +67,30 @@ class App:
         point = np.array(point)
         rotated = np.dot(rotateZ, point.reshape(3, 1))
         rotated = rotated.tolist()
-        return rotated
+        return [rotated[0][0],rotated[1][0],rotated[2][0]] 
 
 
     def translate(self, point, vec):
         tx, ty, tz = vec[0], vec[1], vec[2]
-        translated = [point[0][0] + tx, point[1][0] + ty, point[2][0] + tz]
+        translated = [point[0] + tx, point[1] + ty, point[2] + tz]
         return translated
 
 
     def draw(self):
         # self.angle = pg.mouse.get_pos()[0] / 1000
-        self.angle += 0.001
+        self.angle += 0.01
         self.screen.fill(WHITE)
         points = [[3, -1, 3], [5, -1, 3], [5, 1, 3], [3, 1, 3], [3, -1, -3], [5, -1, -3], [5, 1, -3], [3, 1, -3], [0,0,0],
-        [-1,1, 1],[1,1, 1],[-1,-1, 1],[1,-1, 1],[-1,1,-1],[1,1,-1],[-1,-1,-1],[1,-1,-1]]
+        [-1,1,1],[1,1,1],[-1,-1,1],[1,-1, 1],[-1,1,-1],[1,1,-1],[-1,-1,-1],[1,-1,-1]]
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:
             rotated = self.rotateY(point, self.angle+0.01)
-            rotated = self.rotateX(rotated, self.angle)
-            rotated = self.translate(rotated, [1, 3, 5])
+            #rotated = self.rotateX(rotated, self.angle)
+            rotated = self.translate(rotated, [self.angle*2, self.angle*2, self.angle*2])
             projected = self.project(rotated)
-            x = projected[0][0] * self.scale + self.H_WIDTH
-            y = projected[1][0] * self.scale + self.H_HEIGHT
+            x = projected[0] * self.scale + self.H_WIDTH
+            y = projected[1] * self.scale + self.H_HEIGHT
             projected_points[i] = x, y
             pg.draw.circle(self.screen, BLACK, (x, y), 2)
             i += 1
