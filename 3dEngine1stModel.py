@@ -14,7 +14,7 @@ class App:
         self.clock = pg.time.Clock()
         self.angle = 0
         self.scale = 100
-        self.distance = 12
+        self.distance = 6
     
 
     def connect_points(self, i, j, points):
@@ -78,7 +78,7 @@ class App:
 
     def draw(self):
         # self.angle = pg.mouse.get_pos()[0] / 1000
-        self.angle += 0.01
+        self.angle += 0.001
         self.screen.fill(WHITE)
         points = [[3, -1, 3], [5, -1, 3], [5, 1, 3], [3, 1, 3], [3, -1, -3], [5, -1, -3], [5, 1, -3], [3, 1, -3], [0,0,0],
         [-1,1,1],[1,1,1],[-1,-1,1],[1,-1, 1],[-1,1,-1],[1,1,-1],[-1,-1,-1],[1,-1,-1]]
@@ -86,8 +86,8 @@ class App:
         i = 0
         for point in points:
             rotated = self.rotateY(point, self.angle+0.01)
-            #rotated = self.rotateX(rotated, self.angle)
-            rotated = self.translate(rotated, [self.angle*2, self.angle*2, self.angle*2])
+            rotated = self.rotateX(rotated, self.angle)
+            rotated = self.translate(rotated, [0,0,-self.angle*5])
             projected = self.project(rotated)
             x = projected[0] * self.scale + self.H_WIDTH
             y = projected[1] * self.scale + self.H_HEIGHT

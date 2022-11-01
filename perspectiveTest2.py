@@ -28,16 +28,20 @@ class App:
         a = self.WIDTH / self.HEIGHT
         f = 1/math.tan(fov * 0.5 / 180 * math.pi)
         q = zfar/(zfar-znear)
+        b = (-zfar*znear)/(zfar-znear)
+        c = (-znear-zfar)/(znear-zfar)
+        d = (2*zfar*znear)/(znear-zfar)
         p = np.matrix([
             [a*f,0,0,0],
             [0,f,0,0],
-            [0,0,q,1],
-            [0,0,-znear*q,0]
+            [0,0,c,d],
+            [0,0,-1,0]
         ])
 
         point = np.array(point)
         projected = np.matmul(p, point.reshape(4,1))
         projected = projected.tolist()
+        print(projected)
         projected[0][0] = projected[0][0] / projected[3][0]
         projected[1][0] = projected[1][0] / projected[3][0]
         projected[2][0] = projected[2][0] / projected[3][0]
