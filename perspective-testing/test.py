@@ -15,6 +15,7 @@ class App:
         return p[0]/-p[2], p[1]/-p[2]
 
     def draw(self):
+        self.screen.fill((255,255,255))
         points = [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]]
         for i in points:
             print(i)
