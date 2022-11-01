@@ -17,20 +17,33 @@ class App:
         s = 1 / np.tan((fov/2)*(np.pi/180))
         f = 5
         n = 1
+        # matrix = [
+        #     [s, 0, 0, 0],
+        #     [0, s, 0, 0],
+        #     [0, 0, -f/(f-n), -1],
+        #     [0, 0, -(f*n)/(f-n), 0]
+        # ]
         matrix = [
             [s, 0, 0, 0],
             [0, s, 0, 0],
             [0, 0, -f/(f-n), -1],
-            [0, 0, -(f*n)/(f-n), 0]
+            [0, 0, 1, 0]
         ]
         return matrix
 
     def draw(self):
-        points = [[-1, -1, 1, 1], [1, -1, 1, 1], [1, 1, 1, 1], [-1, 1, 1, 1], [-1, -1, -1, 1], [1, -1, -1, 1], [1, 1, -1, 1], [-1, 1, -1, 1]]
+        self.screen.fill((255,255,255))
+        points = [[-5, -5, 5, 1], [5, -5, 5, 1], [5, 5, 5, 1], [-5, 5, 5, 1], [-5, -5, -5, 1], [5, -5, -5, 1], [5, 5, -5, 1], [-5, 5, -5, 1]]
         for i in points:
             projected = np.dot(self.perspective_p(),i)
+            projected = projected.tolist()
+            x, y, z, w = projected
+            x /= z
+            y /= z
             print(projected)
-            #pg.draw.circle(self.screen, (0,0,0), (x, y), 5)
+            x, y = (projected[0]*10)+self.H_WIDTH, (projected[1]*10)+self.H_HEIGHT
+            print(x, y)
+            pg.draw.circle(self.screen, (0,0,0), (x, y), 1)
 
     def run(self):
         while True:
