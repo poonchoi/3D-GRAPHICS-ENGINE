@@ -8,7 +8,10 @@ class Matrix():
     def __init__(self, matrix):
         self.matrix = matrix
         self.height = len(matrix)
-        self.width = len(matrix[0])
+        if self.height != 1:
+            self.width = len(matrix[0])
+        else:
+            self.width = None ## FIX THIS
     
     def __repr__(self):
         """
@@ -52,10 +55,6 @@ class Matrix():
         """
         a = self.matrix
         b = other
-        # cols_a = len(a[0])
-        # rows_a = len(a)
-        # cols_b = len(b[0])
-        # rows_b = len(b)
         cols_a = self.width
         rows_a = self.height
         cols_b = other.width
@@ -71,13 +70,13 @@ class Matrix():
                     result[i][j] = sum
             return result
 
-x = Matrix([[1,2,3]])
+x = Matrix([1,2,3])
 y = Matrix([[1, 0, 0],
             [0, 1, 0],
             [0, 0, 0]])
 
 result = x*y
-print(result)
+print(result[0])
 
 ### TESTING MATRIX MULTIPLICATION FUNCTION ###
 
