@@ -6,9 +6,7 @@ a = m.mat([
     [0, 0, 0]
 ])
 
-b = m.mat([
-    1, 2, 3
-])
+b = m.mat([1, 2, 3])
 
 print(a)
 print(b)
