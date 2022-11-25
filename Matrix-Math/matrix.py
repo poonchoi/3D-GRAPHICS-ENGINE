@@ -9,15 +9,20 @@ def zeroes(height, width): # need to finish
 class Matrix():
     def __init__(self, matrix):
         self.matrix = matrix
+        self.width, self.height, self.is_vector = self.initialize_attributes()
 
+    
+    def initialize_attributes(self):
         try: # this is if the matrix is actually a matrix
-            self.width = len(matrix[0])
-            self.height = len(matrix)
-            self.is_vector = False
+            width = len(self.matrix[0])
+            height = len(self.matrix)
+            is_vector = False
         except TypeError: # this is here if the matrix is actually a vector
-            self.width = len(matrix)
-            self.height = 1
-            self.is_vector = True
+            width = len(self.matrix)
+            height = 1
+            is_vector = True
+
+        return width, height, is_vector
 
 
     def __repr__(self):
