@@ -11,5 +11,4 @@ b = m.Matrix([
     [3]
 ])
 
-
 print(a * b)

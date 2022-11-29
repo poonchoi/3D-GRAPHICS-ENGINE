@@ -1,9 +1,10 @@
-class point:
-    def __init__(self, coordinate, angle_to_rotate=None, transform=None, scale=None):
-        self.coordinate = 0
+from MatrixMath import matrix as m
+from world_space import World_Space
+
+class Point(World_Space):
+    def __init__(self, coordinate):
+        self.coordinate = m.Matrix(coordinate)
     
-    def project(self):
-        pass
 
 
-point = point([1,2,3])
+point = Point([1,2,3])
