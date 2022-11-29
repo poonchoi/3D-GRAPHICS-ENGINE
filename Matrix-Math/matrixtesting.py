@@ -3,12 +3,13 @@ import matrix as m
 a = m.Matrix([
     [1, 0, 0],
     [0, 1, 0],
-    [0, 0, 0]])
+    [3, 4, 5]])
 
-b = m.Matrix([1,2,3])
+b = m.Matrix([
+    [1],
+    [2],
+    [3]
+])
 
-c = m.zeroes(7,3)
 
-d = m.Matrix([[1,2,3]])
-
-print(d*a)
+print(a * b)

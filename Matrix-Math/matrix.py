@@ -8,50 +8,31 @@ def zeroes(height, width): # need to finish
 
 class Matrix():
     def __init__(self, matrix):
+        """
+        Gets the height and width of the matrix
+        """
         self.matrix = matrix
-        self.width, self.height, self.is_vector = self.initialize_attributes()
-
-    
-    def initialize_attributes(self):
-        try: # this is if the matrix is actually a matrix
-            width = len(self.matrix[0])
-            height = len(self.matrix)
-            is_vector = False
-        except TypeError: # this is here if the matrix is actually a vector
-            width = len(self.matrix)
-            height = 1
-            is_vector = True
-
-        return width, height, is_vector
+        self.width = len(self.matrix[0])
+        self.height = len(self.matrix)
 
 
     def __repr__(self):
         """
         Defines behaviour of printing a Matrix object
         """
-        if self.is_vector == False:
-            print("[",end="")
-            for height in range(self.height):
-                print("[",end="")
-                for width in range(self.width):
-                    if width != self.width-1:
-                        print(f"{self.matrix[height][width]} ",end="")
-                    else:
-                        print(f"{self.matrix[height][width]}",end="")
-                if height != self.height-1:
-                    print("]")
-                else:
-                    print("]",end="")
-            print("]",end="")
-        else:
+        print("[",end="")
+        for height in range(self.height):
             print("[",end="")
             for width in range(self.width):
                 if width != self.width-1:
-                    print(f"{self.matrix[width]} ",end="")
+                    print(f"{self.matrix[height][width]} ",end="")
                 else:
-                    print(f"{self.matrix[width]}",end="")
-                
-            print("]",end="")
+                    print(f"{self.matrix[height][width]}",end="")
+            if height != self.height-1:
+                print("]")
+            else:
+                print("]",end="")
+        print("]",end="")
         return ("")
 
 
@@ -71,11 +52,12 @@ class Matrix():
         """
         Defines behaviour of multiplying matrix object with non-matrix object
         """
-        if isinstance(value, int) or isinstance(value, float):
+        if isinstance(value, int) or isinstance(value, float): # checks if the value is a number
             result = zeroes(self.height, self.width)
             for h in range(self.height):
                 for w in range(self.w):
                     pass
+        return None
 
 
     def __mul__(self, other):
@@ -89,35 +71,26 @@ class Matrix():
         cols_b = other.width
         rows_b = other.height
 
-        if a.is_vector == False and b.is_vector == False: # neither are vectors
-            try:
-                if cols_a == rows_b:
-                    # result = Matrix([[j for j in range(cols_b)] for i in range(rows_a)]) # replace with zeroes function
-                    result = zeroes(rows_a, cols_b)
-                    for i in range(rows_a):
-                        for j in range(cols_b):
-                            sum = 0
-                            for k in range(cols_a):
-                                sum += a[i][k] * b[k][j]
-                            result[i][j] = sum
-                    return result
-                elif cols_b == rows_a:
-                    # result = Matrix([[j for j in range(cols_a)] for i in range(rows_b)]) # replace with zeroes function
-                    result = zeroes(rows_b, cols_a)
-                    for i in range(rows_b):
-                        for j in range(cols_a):
-                            sum = 0
-                            for k in range(cols_b):
-                                sum += b[i][k] * a[k][j]
-                            result[i][j] = sum
-                    return result
-                else:
-                    return ("ROWS OF ONE MATRIX MUST EQUAL COLUMNS OF THE OTHER")
-            except:
-                return ("ERROR OCCURED")
-        elif a.is_vector == True and b.is_vector == False: # only a is a vector
-            return ("havent made this yet")
-        elif a.is_vector == False and b.is_vector == True: # only b is a vector
-            return ("havent made this yet")
-        elif a.is_vector == True and b.is_vector == True: # both are vectors
-            return ("havent made this yet")
+        try:
+            if cols_a == rows_b:
+                result = zeroes(rows_a, cols_b)
+                for i in range(rows_a):
+                    for j in range(cols_b):
+                        sum = 0
+                        for k in range(cols_a):
+                            sum += a[i][k] * b[k][j]
+                        result[i][j] = sum
+                return result
+            elif cols_b == rows_a:
+                result = zeroes(rows_b, cols_a)
+                for i in range(rows_b):
+                    for j in range(cols_a):
+                        sum = 0
+                        for k in range(cols_b):
+                            sum += b[i][k] * a[k][j]
+                        result[i][j] = sum
+                return result
+            else:
+                return ("ROWS OF ONE MATRIX MUST EQUAL COLUMNS OF THE OTHER")
+        except:
+            return ("ERROR OCCURED")

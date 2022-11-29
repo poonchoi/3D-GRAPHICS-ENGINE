@@ -1,6 +1,6 @@
 class point:
     def __init__(self, coordinate, angle_to_rotate=None, transform=None, scale=None):
-        self.coordinate = point
+        self.coordinate = 0
     
     def project(self):
         pass
