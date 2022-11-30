@@ -1,0 +1,8 @@
+when you write your code using the library you gotta first make an instance of the world space:
+    app = World_Space()
+
+in between you can create cubes and shapes and plot points and stuff like that
+
+then at the end you do:
+    if __name__ == "__main__":
+        app.run()
