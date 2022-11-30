@@ -1,18 +1,17 @@
 class World_Space:
-    def __init__(self, angle_to_rotate=None, transform=None, scale=None):
+    def __init__(self):
         self.all_shapes = []
-        self.all_points = []
-    def add_shape(self):
+    def add_shape(self, shape):
         pass
     def project(self):
         pass
-    def rotate_x(self):
+    def rotate_x(self, angle):
         pass
-    def rotate_y(self):
+    def rotate_y(self, angle):
         pass
-    def rotate_z(self):
+    def rotate_z(self, angle):
         pass
-    def translate(self):
+    def translate(self, new_pos):
         pass
     def draw(self):
         pass

@@ -11,4 +11,6 @@ b = m.Matrix([
     [3]
 ])
 
-print(a * b)
+c = m.Matrix([[1, 2, 3]])
+
+print(10 * b)

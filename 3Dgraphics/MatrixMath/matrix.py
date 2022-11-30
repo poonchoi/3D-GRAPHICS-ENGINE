@@ -21,13 +21,14 @@ class Matrix():
         Defines behaviour of printing a Matrix object
         """
         print("[",end="")
+        # loop that iterates throguh every item of the matrix
         for height in range(self.height):
             print("[",end="")
             for width in range(self.width):
-                if width != self.width-1:
-                    print(f"{self.matrix[height][width]} ",end="")
+                if width != self.width-1: # if the number isnt the last in its row
+                    print(f"{self.matrix[height][width]}, ",end="")
                 else:
-                    print(f"{self.matrix[height][width]}",end="")
+                    print(f"{self.matrix[height][width]}",end="") # if the number is that last in its row
             if height != self.height-1:
                 print("]")
             else:
@@ -55,40 +56,35 @@ class Matrix():
         if isinstance(value, int) or isinstance(value, float): # checks if the value is a number
             result = zeroes(self.height, self.width)
             for h in range(self.height):
-                for w in range(self.w):
-                    pass
-        return None
+                for w in range(self.width):
+                    result[h][w] == self.matrix[h][w] * value
+            return result
+        else:
+            return "ERROR OCCURED"
 
 
     def __mul__(self, other):
         """
         Defines the behaviour of the * operator
         """
-        a = self.matrix
-        b = other
-        cols_a = self.width
-        rows_a = self.height
-        cols_b = other.width
-        rows_b = other.height
-
         try:
-            if cols_a == rows_b:
-                result = zeroes(rows_a, cols_b)
-                for i in range(rows_a):
-                    for j in range(cols_b):
+            if self.width == other.height:
+                result = zeroes(self.height, other.width)
+                for h in range(self.height):
+                    for w in range(other.width):
                         sum = 0
-                        for k in range(cols_a):
-                            sum += a[i][k] * b[k][j]
-                        result[i][j] = sum
+                        for k in range(self.width):
+                            sum += self.matrix[h][k] * other[k][w]
+                        result[h][w] = sum
                 return result
-            elif cols_b == rows_a:
-                result = zeroes(rows_b, cols_a)
-                for i in range(rows_b):
-                    for j in range(cols_a):
+            elif other.width == self.height:
+                result = zeroes(other.height, self.width)
+                for h in range(other.height):
+                    for w in range(self.width):
                         sum = 0
-                        for k in range(cols_b):
-                            sum += b[i][k] * a[k][j]
-                        result[i][j] = sum
+                        for k in range(other.width):
+                            sum += other[h][k] * self.matrix[k][w]
+                        result[h][w] = sum
                 return result
             else:
                 return ("ROWS OF ONE MATRIX MUST EQUAL COLUMNS OF THE OTHER")
