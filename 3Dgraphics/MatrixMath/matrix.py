@@ -55,9 +55,9 @@ class Matrix():
         """
         if isinstance(value, int) or isinstance(value, float): # checks if the value is a number
             result = zeroes(self.height, self.width)
-            for h in range(self.height):
-                for w in range(self.width):
-                    result[h][w] == self.matrix[h][w] * value
+            for height in range(self.height):
+                for width in range(self.width):
+                    result[height][width] =  self.matrix[height][width] * value
             return result
         else:
             return "ERROR OCCURED"
@@ -70,21 +70,21 @@ class Matrix():
         try:
             if self.width == other.height:
                 result = zeroes(self.height, other.width)
-                for h in range(self.height):
-                    for w in range(other.width):
+                for height in range(self.height):
+                    for width in range(other.width):
                         sum = 0
-                        for k in range(self.width):
-                            sum += self.matrix[h][k] * other[k][w]
-                        result[h][w] = sum
+                        for other_height in range(self.width):
+                            sum += self.matrix[height][other_height] * other[other_height][width]
+                        result[height][width] = sum
                 return result
             elif other.width == self.height:
                 result = zeroes(other.height, self.width)
-                for h in range(other.height):
-                    for w in range(self.width):
+                for height in range(other.height):
+                    for width in range(self.width):
                         sum = 0
-                        for k in range(other.width):
-                            sum += other[h][k] * self.matrix[k][w]
-                        result[h][w] = sum
+                        for other_height in range(other.width):
+                            sum += other[height][other_height] * self.matrix[other_height][width]
+                        result[height][width] = sum
                 return result
             else:
                 return ("ROWS OF ONE MATRIX MUST EQUAL COLUMNS OF THE OTHER")

@@ -1,9 +1,9 @@
 import matrix as m
 
 a = m.Matrix([
-    [1, 0, 0],
-    [0, 1, 0],
-    [3, 4, 5]])
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1]])
 
 b = m.Matrix([
     [1],
@@ -13,4 +13,4 @@ b = m.Matrix([
 
 c = m.Matrix([[1, 2, 3]])
 
-print(10 * b)
+print(4*c)
