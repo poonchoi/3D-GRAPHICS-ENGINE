@@ -13,4 +13,4 @@ b = m.Matrix([
 
 c = m.Matrix([[1, 2, 3]])
 
-print(4*c)
+print(0.1 *c)
