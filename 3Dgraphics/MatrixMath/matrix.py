@@ -18,14 +18,14 @@ class Matrix():
 
     def __repr__(self):
         """
-        Defines behaviour of printing a Matrix object
+        Defines behavior of printing a Matrix object
         """
         print("[",end="")
-        # loop that iterates throguh every item of the matrix
+        # loop that iterates through every item of the matrix
         for height in range(self.height):
             print("[",end="")
             for width in range(self.width):
-                if width != self.width-1: # if the number isnt the last in its row
+                if width != self.width-1: # if the number is'nt the last in its row
                     print(f"{self.matrix[height][width]}, ",end="")
                 else:
                     print(f"{self.matrix[height][width]}",end="") # if the number is that last in its row
@@ -51,7 +51,7 @@ class Matrix():
 
     def __rmul__(self, value):
         """
-        Defines behaviour of multiplying matrix object with non-matrix object
+        Defines behavior of multiplying matrix object with non-matrix object
         """
         if isinstance(value, int) or isinstance(value, float): # checks if the value is a number
             result = zeroes(self.height, self.width)
@@ -60,12 +60,12 @@ class Matrix():
                     result[height][width] =  self.matrix[height][width] * value
             return result
         else:
-            return "ERROR OCCURED"
+            return "ERROR OCCURRED"
 
 
     def __mul__(self, other):
         """
-        Defines the behaviour of the * operator
+        Defines the behavior of the * operator
         """
         try:
             if self.width == other.height:
@@ -89,4 +89,4 @@ class Matrix():
             else:
                 return ("ROWS OF ONE MATRIX MUST EQUAL COLUMNS OF THE OTHER")
         except:
-            return ("ERROR OCCURED")
+            return ("ERROR OCCURRED")
