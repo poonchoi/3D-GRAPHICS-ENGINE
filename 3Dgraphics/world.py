@@ -5,7 +5,7 @@ import math as m
 
 class World:
     def __init__(self, dimensions=(100,100)):
-        self.dimnesions = dimensions
+        self.dimensions = dimensions
         self.all_shapes = []
         self.__PROJECT_MATRIX = Matrix([[1, 0, 0],
                                         [0, 1, 0]
