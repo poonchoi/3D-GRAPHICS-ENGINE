@@ -14,5 +14,3 @@ class Point():
 
     def __repr__(self):
         return str(self.coordinate[0])
-
-xyz = Point([1, 2, 3])
