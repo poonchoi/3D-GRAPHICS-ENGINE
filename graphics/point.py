@@ -1,14 +1,13 @@
 from MatrixMath.matrix import Matrix
-from world import World
 import math as m
 
-class Point(World):
+class Point():
     projection_matrix = Matrix([[1, 0, 0],
                                 [0, 1, 0],
                                 [0, 0, 0]])
-    def __init__(self, world, coordinate):
+    def __init__(self, app, coordinate):
         self.coordinate = Matrix([coordinate])
-        world.add_point()
+        app.world.add_point()
     
     def project(self):
         return self.coordinate * Point.projection_matrix
