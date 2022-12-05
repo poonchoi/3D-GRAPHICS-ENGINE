@@ -1,5 +1,7 @@
 from MatrixMath.matrix import Matrix
 import pygame as pg
+import math as m
+
 
 class App:
     def __init__(self, dimensions):
@@ -90,6 +92,3 @@ class World():
 
     def check_movement(self):
         key = pg.key.get_pressed()
-
-    def run(self):
-        pass
