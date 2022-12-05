@@ -1,13 +1,15 @@
 from MatrixMath.matrix import Matrix
+from app import App
 import pygame as pg
 import math as m
 
 
-class World:
-    def __init__(self, dimensions=(100,100)):
+class World():
+    def __init__(self, dimensions, screen):
         self.dimensions = dimensions
+        self.screen = screen
         self.all_shapes = []
-        self.__PROJECT_MATRIX = Matrix([[1, 0, 0],
+        self._PROJECT_MATRIX = Matrix([[1, 0, 0],
                                         [0, 1, 0]
                                         [0, 0, 0]])
 
@@ -20,13 +22,8 @@ class World:
         self.all_shapes.append(shape)
 
 
-    def project(self):
-        projected_points = [[n, n] for n in range(len(self.self.all_shapes))]
-        for shape in self.all_shapes:
-            for point in shape:
-                projected_points
-
-        return point * self.__PROJECT_MATRIX
+    def project(self, point):
+        return point * self._PROJECT_MATRIX
 
 
     def rotate_x(self, angle, point):
@@ -59,7 +56,13 @@ class World:
 
 
     def draw(self):
-        pass
+        projected_points = [[n, n] for n in range(len(self.self.all_shapes))]
+        for shape in self.all_shapes:
+            for point in shape:
+                # projected_points[shape][point] = self.project(point)
+                projected = self.project(point)
+                x, y, z = projected
+                pg.draw.circle(self.screen, (0,255,0), (projected))
 
 
     def check_movement(self):
