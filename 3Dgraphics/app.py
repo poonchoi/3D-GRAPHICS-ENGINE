@@ -10,7 +10,7 @@ class App:
         self.FPS = 100
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
-        self.world = World(self.RES)
+        self.world = World(self.RES, self.screen)
 
 
     def run(self):
