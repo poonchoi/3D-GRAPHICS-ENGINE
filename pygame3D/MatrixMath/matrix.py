@@ -47,7 +47,7 @@ class Matrix():
           [1,2,3]
         """
         return self.matrix[index] 
-    
+
 
     def __rmul__(self, value):
         """

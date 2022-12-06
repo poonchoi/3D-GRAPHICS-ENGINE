@@ -1,6 +1,12 @@
 from pygame3D import pg3d
 
-app = pg3d.App(300, 300)
-new_point = pg3d.Point(app, [1, 2, 3])
+new_app = pg3d.App([800, 800])
 
-app.run()
+points = [[100, 100, 100], [-100, 100, 100], [-100, -100, 100], [100, -100, 100],
+        [100, 100, -100], [-100, 100, -100], [-100, -100, -100], [100, -100, -100]]
+
+for point in points:
+    pg3d.Point(new_app, point)
+
+if __name__ == "__main__":
+    new_app.run()

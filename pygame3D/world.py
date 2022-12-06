@@ -1,5 +1,4 @@
 from MatrixMath.matrix import Matrix
-from app import App
 import pygame as pg
 import math as m
 
@@ -7,10 +6,12 @@ import math as m
 class World():
     def __init__(self, dimensions, screen):
         self.dimensions = dimensions
+        self.h_width = dimensions[0] // 2
+        self.h_height = dimensions[1] // 2
         self.screen = screen
         self.all_shapes = []
         self._PROJECT_MATRIX = Matrix([[1, 0, 0],
-                                        [0, 1, 0]
+                                        [0, 1, 0],
                                         [0, 0, 0]])
 
 
@@ -56,13 +57,13 @@ class World():
 
 
     def draw(self):
-        projected_points = [[n, n] for n in range(len(self.self.all_shapes))]
+        projected_points = [[n, n] for n in range(len(self.all_shapes))]
         for shape in self.all_shapes:
             for point in shape:
                 # projected_points[shape][point] = self.project(point)
-                projected = self.project(point)
+                projected = point.project()
                 x, y, z = projected
-                pg.draw.circle(self.screen, (0,255,0), (projected))
+                pg.draw.circle(self.screen, (0,255,0), (x + self.h_width, y + self.h_height), 6)
 
 
     def check_movement(self):
