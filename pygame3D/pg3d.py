@@ -103,7 +103,9 @@ class World():
         x, y, z = new_pos
         for shape in self.all_shapes:
             for point in shape:
-                print(point)
+                point[0] = x
+                point[1] = x
+                point[1] = x
 
 
     def draw(self):
