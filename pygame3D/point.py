@@ -21,6 +21,10 @@ class Point():
         return str(self.coordinate[0])
 
 
+    def __setitem__(self, index, value):
+        self.coordinate[0][index] = value
+
+
     def __getitem__(self, item):
         if item == 0 or item == 1 or item == 2:
             return self.coordinate[0][item]
