@@ -101,13 +101,9 @@ class World():
         moves point by given values in x, y & z
         """
         x, y, z = new_pos
-        translate = Matrix([[x, 0, 0],
-                            [0, y, 0],
-                            [0, 0, z]])
-        for shape in range(len(self.all_shapes)):
-            for point in range(len(self.all_shapes[shape])):
-                self.all_shapes[shape][point] *= translate
-                print(type(self.all_shapes))
+        for shape in self.all_shapes:
+            for point in shape:
+                print(point)
 
 
     def draw(self):
