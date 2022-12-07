@@ -14,7 +14,7 @@ class App:
         self.FPS = 100
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
-        self.world = World(self.RES, self.screen)
+        self.world = World(self.RES, self.screen, self)
 
     def add_point(self, point):
         self.world.add_point(point)
@@ -37,7 +37,10 @@ class App:
 
 
 class World():
-    def __init__(self, dimensions, screen):
+    def __init__(self, dimensions, screen, app):
+        self.app = app
+        self.camera_pos = [0, 0, 0]
+        self.movement_speed = 5
         self.angle = 0
         self.dimensions = dimensions
         self.h_width = dimensions[0] // 2
@@ -45,8 +48,8 @@ class World():
         self.screen = screen
         self.all_shapes = []
         self._PROJECT_MATRIX = Matrix([[1, 0, 0],
-                                        [0, 1, 0],
-                                        [0, 0, 0]])
+                                       [0, 1, 0],
+                                       [0, 0, 0]])
 
 
     def add_point(self, point):
@@ -101,9 +104,10 @@ class World():
         translate = Matrix([[x, 0, 0],
                             [0, y, 0],
                             [0, 0, z]])
-        for shape in self.all_shapes:
-            for point in shape:
-                self.all_shapes[shape][point] = point * translate
+        for shape in range(len(self.all_shapes)):
+            for point in range(len(self.all_shapes[shape])):
+                self.all_shapes[shape][point] *= translate
+                print(type(self.all_shapes))
 
 
     def draw(self):
@@ -112,7 +116,7 @@ class World():
         then projects the points so they can be drawn on a 2d screen
         """
         for shape in self.all_shapes:
-            for point in shape: # only draw point if z coordinate is infront of camera
+            for point in shape: # only draw point if z coordinate is in front of camera
                 projected = point.project()
                 x, y, z = projected
                 pg.draw.circle(self.screen, (0,255,0), (x + self.h_width, y + self.h_height), 6)
@@ -120,12 +124,18 @@ class World():
 
     def check_movement(self):
         key = pg.key.get_pressed()
+        if key[pg.K_w]:
+            self.camera_pos[2] += self.movement_speed
+            self.translate((0, 0, self.movement_speed))
+        if key[pg.K_s]:
+            self.camera_pos[2] -= self.movement_speed
+            self.translate((0, 0, -self.movement_speed))
         if key[pg.K_a]:
-            pass
-
-
-    def run(self):
-        pass
+            self.camera_pos[0] -= self.movement_speed
+            self.translate((-self.movement_speed, 0, 0))
+        if key[pg.K_d]:
+            self.camera_pos[0] += self.movement_speed
+            self.translate((self.movement_speed, 0, 0))
 
 
 
