@@ -37,6 +37,10 @@ class Matrix():
         return ("")
 
 
+    def __setitem__(self, index, value):
+        self.matrix[index] = value
+
+
     def __getitem__(self, index):
         """
         Defines behavior of using square brackets on Matrix objects

@@ -64,36 +64,27 @@ class World():
         """
         rotates point in x axis by given angle
         """
-        rotateX = Matrix([[1, 0, 0],
-                          [0, m.cos(self.angle), m.sin(self.angle)],
-                          [0, -m.sin(self.angle), m.cos(self.angle)]])
         for shape in self.all_shapes:
             for point in shape:
-                self.all_shapes[shape][point] = point * rotateX
+                point.rotate_x(self.angle)
 
 
     def rotate_y(self):
         """
         rotates point in y axis by given angle
         """
-        rotateY = Matrix([[m.cos(self.angle), 0, -m.sin(self.angle)],
-                          [0, 1, 0],
-                          [m.sin(self.angle), 0, m.cos(self.angle)]])
         for shape in self.all_shapes:
             for point in shape:
-                self.all_shapes[shape][point] = point * rotateY
+                point.rotate_y(self.angle)
 
 
     def rotate_z(self):
         """
         rotates point in z axis by given angle
         """
-        rotateZ = Matrix([[m.cos(self.angle), m.sin(self.angle), 0],
-                          [-m.sin(self.angle), m.cos(self.angle), 0],
-                          [0, 0, 1]])
         for shape in self.all_shapes:
             for point in shape:
-                self.all_shapes[shape][point] = point * rotateZ
+                point.rotate_y(self.angle)
 
 
     def translate(self, new_pos):
@@ -103,9 +94,9 @@ class World():
         x, y, z = new_pos
         for shape in self.all_shapes:
             for point in shape:
-                point[0] = x
-                point[1] = x
-                point[1] = x
+                point[0] += x
+                point[1] += y
+                point[2] += z
 
 
     def draw(self):
@@ -134,28 +125,29 @@ class World():
         if key[pg.K_d]:
             self.camera_pos[0] += self.movement_speed
             self.translate((self.movement_speed, 0, 0))
+        
+        if key[pg.K_RIGHT]:
+            self.angle += 0.01
+            self.rotate_y()
+        if key[pg.K_LEFT]:
+            self.angle -= 0.01
+            self.rotate_y()
 
 
 
 
 class Point():
-    projection_matrix = Matrix([[1, 0, 0],
-                                [0, 1, 0],
-                                [0, 0, 0]])
-
-
     def __init__(self, app, coordinate):
         self.coordinate = Matrix([coordinate])
         app.add_point(self)
-    
-
-    def project(self):
-        new_point = self.coordinate * Point.projection_matrix
-        return new_point[0]
 
 
     def __repr__(self):
         return str(self.coordinate[0])
+
+
+    def __setitem__(self, index, value):
+        self.coordinate[0][index] = value
 
 
     def __getitem__(self, item):
@@ -163,3 +155,46 @@ class Point():
             return self.coordinate[0][item]
         else:
             return "invalid"
+    
+
+    def project(self):
+        projection_matrix = Matrix([[1, 0, 0],
+                                    [0, 1, 0],
+                                    [0, 0, 0]])
+        new_point = self.coordinate * projection_matrix
+        return new_point[0]
+
+
+    def rotate_x(self, angle):
+        """
+        rotates point in x axis by given angle
+        """
+        rotateX = Matrix([[1, 0, 0],
+                          [0, m.cos(angle), m.sin(angle)],
+                          [0, -m.sin(angle), m.cos(angle)]])
+        
+        return self.coordinate * rotateX
+
+
+    def rotate_y(self, angle):
+        """
+        rotates point in y axis by given angle
+        """
+        rotateY = Matrix([[m.cos(angle), 0, -m.sin(angle)],
+                          [0, 1, 0],
+                          [m.sin(angle), 0, m.cos(angle)]])
+        return self.coordinate * rotateY
+
+
+    def rotate_z(self, angle):
+        """
+        rotates point in z axis by given angle
+        """
+        rotateZ = Matrix([[m.cos(angle), m.sin(angle), 0],
+                          [-m.sin(angle), m.cos(angle), 0],
+                          [0, 0, 1]])
+        for shape in self.all_shapes:
+            for point in shape:
+                point = point * rotateZ
+
+        return self.coordinate * rotateZ

@@ -16,6 +16,7 @@ class App:
         self.clock = pg.time.Clock()
         self.world = World(self.RES, self.screen)
 
+
     def add_point(self, point):
         self.world.add_point(point)
 
@@ -52,6 +53,7 @@ class World():
     def add_point(self, point):
         self.all_shapes.append([point])
         print(point)
+
 
     def add_shape(self, shape):
         self.all_shapes.append(shape)
