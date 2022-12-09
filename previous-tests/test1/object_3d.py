@@ -17,7 +17,7 @@ class Object3D:
 
         self.font = pg.font.SysFont('Arial', 30, bold=True)
         self.color_faces = [(pg.Color('orange'), face) for face in self.faces]
-        self.movement_flag, self.draw_vertices = True, False
+        self.movement_flag, self.draw_vertices = False, False
         self.label = ''
 
     def draw(self):

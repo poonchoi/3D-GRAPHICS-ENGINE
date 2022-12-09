@@ -16,6 +16,7 @@ class App:
         self.clock = pg.time.Clock()
         self.world = World(self.RES, self.screen, self)
 
+
     def add_point(self, point):
         self.world.add_point(point)
 
@@ -39,8 +40,11 @@ class App:
 class World():
     def __init__(self, dimensions, screen, app):
         self.app = app
-        self.camera_pos = [0, 0, 0]
+        self.camera_pos = [0, 0, -100]
         self.movement_speed = 5
+        self.angle_speed = 0.001
+        self.angle_left = 0
+        self.angle_right = 0
         self.angle = 0
         self.dimensions = dimensions
         self.h_width = dimensions[0] // 2
@@ -60,33 +64,6 @@ class World():
         self.all_shapes.append(shape)
 
 
-    def rotate_x(self):
-        """
-        rotates point in x axis by given angle
-        """
-        for shape in self.all_shapes:
-            for point in shape:
-                point.rotate_x(self.angle)
-
-
-    def rotate_y(self):
-        """
-        rotates point in y axis by given angle
-        """
-        for shape in self.all_shapes:
-            for point in shape:
-                point.rotate_y(self.angle)
-
-
-    def rotate_z(self):
-        """
-        rotates point in z axis by given angle
-        """
-        for shape in self.all_shapes:
-            for point in shape:
-                point.rotate_y(self.angle)
-
-
     def translate(self, new_pos):
         """
         moves point by given values in x, y & z
@@ -104,15 +81,21 @@ class World():
         Loops through all the points of the shapes that have created by the user,
         then projects the points so they can be drawn on a 2d screen
         """
+        self.screen.fill(0)
         for shape in self.all_shapes:
             for point in shape: # only draw point if z coordinate is in front of camera
                 projected = point.project()
                 x, y, z = projected
-                pg.draw.circle(self.screen, (0,255,0), (x + self.h_width, y + self.h_height), 6)
+                pg.draw.circle(self.screen, (0,255,0), (x + self.h_width, y + self.h_height), 3)
 
 
     def check_movement(self):
+        # if self.angle > m.pi:
+        #     self.angle = 0
+        # print(self.angle)
+
         key = pg.key.get_pressed()
+
         if key[pg.K_w]:
             self.camera_pos[2] += self.movement_speed
             self.translate((0, 0, self.movement_speed))
@@ -127,11 +110,25 @@ class World():
             self.translate((self.movement_speed, 0, 0))
         
         if key[pg.K_RIGHT]:
-            self.angle += 0.01
-            self.rotate_y()
+            self.angle_right += self.angle_speed
+            for shape in self.all_shapes:
+                for point in shape:
+                    point.rotate_y(-self.angle_right)
         if key[pg.K_LEFT]:
-            self.angle -= 0.01
-            self.rotate_y()
+            self.angle_left += self.angle_speed
+            for shape in self.all_shapes:
+                for point in shape:
+                    point.rotate_y(self.angle_left)
+        if key[pg.K_UP]:
+            self.angle += self.angle_speed
+            for shape in self.all_shapes:
+                for point in shape:
+                    point.rotate_x(self.angle)
+        if key[pg.K_DOWN]:
+            self.angle -= self.angle_speed
+            for shape in self.all_shapes:
+                for point in shape:
+                    point.rotate_x(self.angle)
 
 
 
@@ -161,6 +158,13 @@ class Point():
         projection_matrix = Matrix([[1, 0, 0],
                                     [0, 1, 0],
                                     [0, 0, 0]])
+        # if self[2] != 0:
+        #     z = 1/self[2]
+        # else:
+        #     z = 0
+        # projection_matrix = Matrix([[z, 0, 0],
+        #                             [0, z, 0],
+        #                             [0, 0, 0]])
         new_point = self.coordinate * projection_matrix
         return new_point[0]
 
@@ -173,7 +177,7 @@ class Point():
                           [0, m.cos(angle), m.sin(angle)],
                           [0, -m.sin(angle), m.cos(angle)]])
         
-        return self.coordinate * rotateX
+        self.coordinate *= rotateX
 
 
     def rotate_y(self, angle):
@@ -183,18 +187,18 @@ class Point():
         rotateY = Matrix([[m.cos(angle), 0, -m.sin(angle)],
                           [0, 1, 0],
                           [m.sin(angle), 0, m.cos(angle)]])
-        return self.coordinate * rotateY
+        self.coordinate *= rotateY
 
 
     def rotate_z(self, angle):
         """
         rotates point in z axis by given angle
         """
-        rotateZ = Matrix([[m.cos(angle), m.sin(angle), 0],
-                          [-m.sin(angle), m.cos(angle), 0],
+        rotateZ = Matrix([[m.cos(angle), -m.sin(angle), 0],
+                          [m.sin(angle), m.cos(angle), 0],
                           [0, 0, 1]])
         for shape in self.all_shapes:
             for point in shape:
                 point = point * rotateZ
 
-        return self.coordinate * rotateZ
+        self.coordinate *= rotateZ
