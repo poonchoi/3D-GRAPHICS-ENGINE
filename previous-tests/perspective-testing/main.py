@@ -12,6 +12,7 @@ class App:
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
 
+
     def perspective_p(self):
         fov = 80
         s = 1 / np.tan((fov/2)*(np.pi/180))
@@ -31,6 +32,7 @@ class App:
         ]
         return matrix
 
+
     def draw(self):
         self.screen.fill((255,255,255))
         points = [[-5, -5, 5, 1], [5, -5, 5, 1], [5, 5, 5, 1], [-5, 5, 5, 1], [-5, -5, -5, 1], [5, -5, -5, 1], [5, 5, -5, 1], [-5, 5, -5, 1]]
@@ -44,6 +46,7 @@ class App:
             x, y = (projected[0]*10)+self.H_WIDTH, (projected[1]*10)+self.H_HEIGHT
             print(x, y)
             pg.draw.circle(self.screen, (0,0,0), (x, y), 1)
+
 
     def run(self):
         while True:
