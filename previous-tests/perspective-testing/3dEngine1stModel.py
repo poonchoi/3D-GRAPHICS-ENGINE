@@ -46,7 +46,7 @@ class App:
         rotateX = np.matrix([[1, 0, 0, 0],
         [0, np.cos(angle), -np.sin(angle), 0],
         [0, np.sin(angle), np.cos(angle), 0]
-        [0, 0, 0, 1],])
+        [0, 0, 0, 1]])
         return rotateX
 
 
