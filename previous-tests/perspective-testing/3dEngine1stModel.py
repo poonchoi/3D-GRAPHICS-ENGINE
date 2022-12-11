@@ -28,45 +28,41 @@ class App:
         self.sx = self.WIDTH / 10
         self.sy = self.HEIGHT / 10
         self.s = 0
-    
+
 
     def connect_points(self, i, j, points):
         pg.draw.aaline(self.screen, BLACK, (points[i][0], points[i][1]), (points[j][0], points[j][1]))
 
 
     def p(self):
-        p = np.matrix(
-            [[(self.f*self.WIDTH)/(2*self.sx), self.s, 0, 0],
-            [0, (self.f*self.HEIGHT)/(2*self.sy), 0, 0],
-            [0, 0, -1, 0],
-            [0, 0, 0, 1]])
+        p = np.matrix([[(self.f*self.WIDTH)/(2*self.sx), self.s, 0, 0],
+        [0, (self.f*self.HEIGHT)/(2*self.sy), 0, 0],
+        [0, 0, -1, 0],
+        [0, 0, 0, 1]])
         return p
 
 
     def rx(self, angle):
-        rotateX = np.matrix(
-            [[1, 0, 0, 0],
-            [0, np.cos(angle), -np.sin(angle), 0],
-            [0, np.sin(angle), np.cos(angle), 0]
-            [0, 0, 0, 1],])
+        rotateX = np.matrix([[1, 0, 0, 0],
+        [0, np.cos(angle), -np.sin(angle), 0],
+        [0, np.sin(angle), np.cos(angle), 0]
+        [0, 0, 0, 1],])
         return rotateX
 
 
     def ry(self, angle):
-        rotateY = np.matrix([
-            [np.cos(angle), np.sin(angle), 0, 0],
-            [0, 1, 0, 0],
-            [-np.sin(angle), np.cos(angle), 1, 0],
-            [0, 0, 0, 1]])
+        rotateY = np.matrix([[np.cos(angle), np.sin(angle), 0, 0],
+        [0, 1, 0, 0],
+        [-np.sin(angle), np.cos(angle), 1, 0],
+        [0, 0, 0, 1]])
         return rotateY
 
 
     def rz(self, angle):
-        rotateZ = np.matrix([
-            [np.cos(angle), -np.sin(angle), 0, 0],
-            [np.sin(angle), np.cos(angle), 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]])
+        rotateZ = np.matrix([[np.cos(angle), -np.sin(angle), 0, 0],
+        [np.sin(angle), np.cos(angle), 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]])
         return rotateZ
 
 
@@ -74,11 +70,10 @@ class App:
         cx = point[0]
         cy = point[1]
         cz = point[2]
-        c = np.matrix([
-            [1, 0, 0, -cx],
-            [0, 1, 0, -cy],
-            [0, 0, 1, -cz],
-            [0, 0, 0, 1]])
+        c = np.matrix([[1, 0, 0, -cx],
+        [0, 1, 0, -cy],
+        [0, 0, 1, -cz],
+        [0, 0, 0, 1]])
         return c
 
     def project(self):
