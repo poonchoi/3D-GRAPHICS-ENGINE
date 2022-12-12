@@ -15,7 +15,7 @@ MAGENTA = (255, 0, 255)
 class App:
     def __init__(self):
         pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = 600, 600
+        self.RES = self.w, self.HEIGHT = 600, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.FPS = 100
         self.screen = pg.display.set_mode(self.RES)
@@ -24,10 +24,14 @@ class App:
         self.scale = 100
         self.distance = 9
 
+        self.w, self.h = 600, 600
+        self.cam = np.array([0,0,0,1])
+        self.rot = np.array([0,0,0])
         self.f = 0.1
-        self.sx = self.WIDTH / 10
-        self.sy = self.HEIGHT / 10
-        self.s = 0
+        self.px, self.py = self.w/1000, self.h/1000
+        self.offx, self.offy = self.w/2, self.h/2
+        self.pix = 12
+        self.skew = 0
 
 
     def connect_points(self, i, j, points):
@@ -35,35 +39,43 @@ class App:
 
 
     def p(self):
-        p = np.matrix([[(self.f*self.WIDTH)/(2*self.sx), self.s, 0, 0],
-        [0, (self.f*self.HEIGHT)/(2*self.sy), 0, 0],
-        [0, 0, -1, 0],
-        [0, 0, 0, 1]])
+        p = np.array([
+            [(self.f*self.w)/(2*self.px),self.skew,0,0],
+            [0,(self.f*self.h)/(2*self.py),0,0],
+            [0,0,-1,0],
+            [0,0,0,1]
+        ])
         return p
 
 
-    def rx(self, angle):
-        rotateX = np.matrix([[1, 0, 0, 0],
-        [0, np.cos(angle), -np.sin(angle), 0],
-        [0, np.sin(angle), np.cos(angle), 0]
-        [0, 0, 0, 1]])
-        return rotateX
+    def rx(self):
+        rx = np.array([
+            [1,0,0,0],
+            [0,np.cos(self.rot[0]),-np.sin(self.rot[0]),0],
+            [0,np.sin(self.rot[0]),np.cos(self.rot[0]),0],
+            [0,0,0,1]
+        ])
+        return rx
 
 
-    def ry(self, angle):
-        rotateY = np.matrix([[np.cos(angle), np.sin(angle), 0, 0],
-        [0, 1, 0, 0],
-        [-np.sin(angle), np.cos(angle), 1, 0],
-        [0, 0, 0, 1]])
-        return rotateY
+    def ry(self)
+        ry = np.array([
+            [np.cos(self.rot[1]),0,np.sin(self.rot[1]),0],
+            [0,1,0,0],
+            [-np.sin(self.rot[1]),0,np.cos(self.rot[1]),0],
+            [0,0,0,1]
+        ])
+        return ry
 
 
-    def rz(self, angle):
-        rotateZ = np.matrix([[np.cos(angle), -np.sin(angle), 0, 0],
-        [np.sin(angle), np.cos(angle), 0, 0],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1]])
-        return rotateZ
+    def rz(self):
+        rz = np.array([
+            [np.cos(self.rot[2]),-np.sin(self.rot[2]),0,0],
+            [np.sin(self.rot[2]),np.cos(self.rot[2]),0,0],
+            [0,0,1,0],
+            [0,0,0,1]
+        ])
+        return rz
 
 
     def c(self, point):
