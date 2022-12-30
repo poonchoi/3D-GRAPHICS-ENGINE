@@ -1,107 +1,9 @@
 import pygame as pg
 import math as m
-from pygame3D.MatrixMath.matrix import Matrix
-
-
-
-class App:
-    def __init__(self, dimensions):
-        """
-        creates all necessary pygame variables and instantiates World class
-        """
-        pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = dimensions
-        self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
-        self.FPS = 60
-        self.screen = pg.display.set_mode(self.RES)
-        self.clock = pg.time.Clock()
-        self.world = World(self.RES, self.screen, self)
-
-
-    def add_point(self, point):
-        self.world.add_point(point)
-    
-    
-    def add_triangle(self, triangle):
-        self.world.add_triangle(triangle)
-
-
-    def run(self):
-        """
-        the main loop
-        """
-        while True:
-            self.world.check_movement()
-            self.world.draw()
-
-            [exit() for i in pg.event.get() if i.type == pg.QUIT]
-            pg.display.set_caption(f"{round(self.clock.get_fps())} FPS")
-            pg.display.flip()
-            self.clock.tick(self.FPS)
-
-
-class Camera():
-    def __init__(self, position):
-        self.position = position
-        self.orientation = [0, 0]
-
-
-class Point():
-    def __init__(self, app, coordinate, vertex=False):
-        self.coordinate = Matrix([coordinate])
-        if not vertex:
-            app.add_point(self)
-        self.app = app
-        self.world = app.world
-
-
-    def __repr__(self):
-        return str(self.coordinate[0])
-
-
-    def __setitem__(self, index, value):
-        self.coordinate[0][index] = value
-
-
-    def __getitem__(self, item):
-        if item == 0 or item == 1 or item == 2:
-            return self.coordinate[0][item]
-
-        else:
-            return "invalid"
-
-    
-    def project(self, P, V):
-        projected = P * V.inverse() * self.coordinate
-
-        if not projected[0][3] <= 0:
-            x = (projected[0][0] / projected[0][3]) + self.app.H_WIDTH
-            y = (projected[0][1] / projected[0][3]) + self.app.H_HEIGHT
-            return x, y
-
-        else:
-            return None
-
-
-class Triangle:
-    def __init__(self, app, a, b, c):
-        self.points = [Point(app, a, True), Point(app, b, True), Point(app, c, True)]
-        self.projected_points = [[None] for i in range(3)]
-        self.app = app
-        app.add_triangle(self)
-
-    def connect_points(self):
-        print(self.projected_points)
-        pg.draw.polygon(self.app.screen, (255,255,255), self.projected_points)
-
-    def check_projected(self):
-        for i in range(2):
-            if None in self.projected_points[i]:
-                self.projected_points[i]
-                return False
-    
-    def __getitem__(self, index):
-        return self.points[index]
+from pg3d.MatrixMath.matrix import Matrix
+from pg3d.camera import Camera
+from pg3d.triangle import Triangle
+from pg3d.point import Point
 
 
 class World():
@@ -114,8 +16,10 @@ class World():
         self.angle = .5
 
         self.dimensions = dimensions
-        self.h_width = dimensions[0] // 2
-        self.h_height = dimensions[1] // 2
+        self.width = dimensions[0]
+        self.height = dimensions[1]
+        self.h_width = self.width // 2
+        self.h_height = self.height // 2
         self.screen = screen
 
         self.mesh = []
@@ -123,7 +27,7 @@ class World():
         self.n = 0.1
         self.f = 1000
         self.fov = 90
-        self.a = dimensions[0] / dimensions[1]
+        self.a = self.width / self.height
 
 
     def add_point(self, point):
@@ -199,18 +103,16 @@ class World():
         for polygon in self.mesh:
 
             if type(polygon) == Triangle:
-                for i in range(2):
-                    print(polygon.points[i].project(self.projection_matrix(), self.view_matrix()))
+                for i in range(3):
                     polygon.projected_points[i] = polygon.points[i].project(self.projection_matrix(), self.view_matrix())
         
                 if polygon.check_projected():
-                    print(polygon.check_projected())
                     polygon.connect_points()
 
-            elif type(polygon) == Point:
+            else:
                 projected = polygon[0].project(self.projection_matrix(), self.view_matrix())
 
-                if projected != None:
+                if projected != False:
                     x, y = projected
                     pg.draw.circle(self.screen, (0,255,0), (x, y), 1)
 
@@ -239,3 +141,10 @@ class World():
             self.camera.orientation[0] += self.angle
         if key[pg.K_DOWN]:
             self.camera.orientation[0] -= self.angle
+        
+        ### mouse movement ###
+
+        # mouse_x, mouse_y = pg.mouse.get_pos()
+        # self.camera.orientation[0] += mouse_x - self.h_width
+        # self.camera.orientation[1] += mouse_y - self.h_height
+        # pg.mouse.set_pos(self.h_width, self.h_height)

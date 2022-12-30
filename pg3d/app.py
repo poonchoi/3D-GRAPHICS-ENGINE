@@ -1,5 +1,5 @@
 import pygame as pg
-from pygame3D.world import World
+from pg3d.world import World
 
 
 class App:

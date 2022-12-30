@@ -1,4 +1,4 @@
-from pygame3D.MatrixMath.matrix import Matrix
+from pg3d.MatrixMath.matrix import Matrix
 import math as m
 
 
@@ -37,4 +37,4 @@ class Point():
             return x, y
 
         else:
-            return None
+            return False
