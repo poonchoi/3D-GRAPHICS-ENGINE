@@ -9,7 +9,7 @@ class Triangle:
         app.add_triangle(self)
 
     def connect_points(self):
-        pg.draw.polygon(self.app.screen, (255,255,255), self.projected_points, 1)
+        pg.draw.polygon(self.app.screen, 0, self.projected_points, 1)
 
     def check_projected(self):
         check = True

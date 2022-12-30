@@ -98,7 +98,7 @@ class World():
         Loops through all the points of the shapes that have created by the user,
         then projects the points so they can be drawn on a 2d screen
         """
-        self.screen.fill(0)
+        self.screen.fill((255,255,255))
 
         for polygon in self.mesh:
 
@@ -114,7 +114,7 @@ class World():
 
                 if projected != False:
                     x, y = projected
-                    pg.draw.circle(self.screen, (0,255,0), (x, y), 1)
+                    pg.draw.circle(self.screen, 0, (x, y), 1)
 
 
     def check_movement(self):

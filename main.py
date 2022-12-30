@@ -4,15 +4,15 @@ new_app = pg3d.App([1000, 800])
 
 vertices = [
     # Front face
-    [-100, -100,  1, 1],  # bottom left
-    [ 100, -100,  1, 1],  # bottom right
-    [ 100,  100,  1, 1],  # top right
-    [-100,  100,  1, 1],  # top left
+    [-100, -100,  1.0, 1.0],  # Bottom left
+    [ 100, -100,  1.0, 1.0],  # Bottom right
+    [ 100,  100,  1.0, 1.0],  # Top right
+    [-100,  100,  1.0, 1.0],  # Top left
     # Back face
-    [-100, -100, -1, 1],  # bottom left
-    [ 100, -100, -1, 1],  # bottom right
-    [ 100,  100, -1, 1],  # top right
-    [-100,  100, -1, 1],  # top left
+    [-100, -100, -1.0, 1.0],  # Bottom left
+    [ 100, -100, -1.0, 1.0],  # Bottom right
+    [ 100,  100, -1.0, 1.0],  # Top right
+    [-100,  100, -1.0, 1.0],  # Top left
 ]
 
 indices = [
@@ -38,7 +38,6 @@ indices = [
 
 for tri in indices:
     pg3d.Triangle(new_app, vertices[tri[0]], vertices[tri[1]], vertices[tri[2]])
-
 
 if __name__ == "__main__":
     new_app.run()
