@@ -23,7 +23,7 @@ class App:
         self.angle = 0
         self.scale = 100
         self.distance = 9
-    
+
 
     def connect_points(self, i, j, points):
         pg.draw.aaline(self.screen, BLACK, (points[i][0], points[i][1]), (points[j][0], points[j][1]))
@@ -93,7 +93,7 @@ class App:
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:
-            rotated = self.rotateY(point, self.angle+0.01)
+            rotated = self.rotateY(point, self.angle)
             #rotated = self.rotateX(rotated, self.angle)
             #rotated = self.translate(rotated, [0,0,-self.angle*5])
             projected = self.project(rotated)

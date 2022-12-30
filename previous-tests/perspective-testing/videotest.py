@@ -2,11 +2,11 @@ import numpy as np
 
 w, h = 600, 480
 
-point = np.array([1, 1, 100, 1])
-cam = np.array([0, 0, 0, 1])
+point = np.array([100, 100, 1, 1])
+cam = np.array([1, 1, 0, 1])
 rot = np.array([0, 0, 0])
 
-f = 0.1
+f = 1
 px, py = w/1000, h/1000
 offx, offy = w/2, h/2
 
@@ -63,7 +63,7 @@ G = np.array([
     [0,0,0,1]
 ])
 
-new_point = point @ P @ rx @ ry @ rz @ G 
+new_point = point @ G  @ P @ rx @ ry @ rz 
 proj = [None, None]
 proj[0] = new_point[0]/new_point[3]
 proj[1] = new_point[1]/new_point[3]

@@ -3,6 +3,8 @@ from pygame3D.MatrixMath.matrix import Matrix
 import math as m
 
 
+
+
 class App:
     def __init__(self, dimensions):
         """
@@ -40,20 +42,17 @@ class App:
 class World():
     def __init__(self, dimensions, screen, app):
         self.app = app
-        self.camera_pos = [0, 0, -100]
-        self.movement_speed = 5
-        self.angle_speed = 0.001
-        self.angle_left = 0
-        self.angle_right = 0
-        self.angle = 0
+        self.camera = [0, 0, 0]
+
+        self.movement_speed = 1
+        self.angle = m.radians(1)
+
         self.dimensions = dimensions
         self.h_width = dimensions[0] // 2
         self.h_height = dimensions[1] // 2
         self.screen = screen
+
         self.all_shapes = []
-        self._PROJECT_MATRIX = Matrix([[1, 0, 0],
-                                       [0, 1, 0],
-                                       [0, 0, 0]])
 
 
     def add_point(self, point):
@@ -84,51 +83,44 @@ class World():
         self.screen.fill(0)
         for shape in self.all_shapes:
             for point in shape: # only draw point if z coordinate is in front of camera
-                projected = point.project()
-                x, y, z = projected
-                pg.draw.circle(self.screen, (0,255,0), (x + self.h_width, y + self.h_height), 3)
+                projected = point.project(self.camera)
+                if projected != False:
+                    x, y, z = projected
+                    pg.draw.circle(self.screen, (0,255,0), (x + self.h_width, y + self.h_height), 1)
 
 
     def check_movement(self):
-        # if self.angle > m.pi:
-        #     self.angle = 0
-        # print(self.angle)
-
         key = pg.key.get_pressed()
 
         if key[pg.K_w]:
-            self.camera_pos[2] += self.movement_speed
+            #self.camera[2] -= self.movement_speed
             self.translate((0, 0, self.movement_speed))
         if key[pg.K_s]:
-            self.camera_pos[2] -= self.movement_speed
+            #self.camera[2] += self.movement_speed
             self.translate((0, 0, -self.movement_speed))
         if key[pg.K_a]:
-            self.camera_pos[0] -= self.movement_speed
+            #self.camera[0] += self.movement_speed
             self.translate((-self.movement_speed, 0, 0))
         if key[pg.K_d]:
-            self.camera_pos[0] += self.movement_speed
+            #self.camera[0] -= self.movement_speed
             self.translate((self.movement_speed, 0, 0))
         
         if key[pg.K_RIGHT]:
-            self.angle_right += self.angle_speed
             for shape in self.all_shapes:
                 for point in shape:
-                    point.rotate_y(-self.angle_right)
+                    point.rotate_y(self.angle)
         if key[pg.K_LEFT]:
-            self.angle_left += self.angle_speed
             for shape in self.all_shapes:
                 for point in shape:
-                    point.rotate_y(self.angle_left)
+                    point.rotate_y(-self.angle)
         if key[pg.K_UP]:
-            self.angle += self.angle_speed
             for shape in self.all_shapes:
                 for point in shape:
                     point.rotate_x(self.angle)
         if key[pg.K_DOWN]:
-            self.angle -= self.angle_speed
             for shape in self.all_shapes:
                 for point in shape:
-                    point.rotate_x(self.angle)
+                    point.rotate_x(-self.angle)
 
 
 
@@ -136,6 +128,7 @@ class World():
 class Point():
     def __init__(self, app, coordinate):
         self.coordinate = Matrix([coordinate])
+        self.in_view = True
         app.add_point(self)
 
 
@@ -153,20 +146,39 @@ class Point():
         else:
             return "invalid"
     
+    def infront_of_cam(self, cam):
+        if self[2] >= cam[2]:
+            self.in_view = False
+        else: 
+            self.in_view = True
 
-    def project(self):
-        projection_matrix = Matrix([[1, 0, 0],
-                                    [0, 1, 0],
-                                    [0, 0, 0]])
-        # if self[2] != 0:
-        #     z = 1/self[2]
-        # else:
-        #     z = 0
-        # projection_matrix = Matrix([[z, 0, 0],
-        #                             [0, z, 0],
-        #                             [0, 0, 0]])
-        new_point = self.coordinate * projection_matrix
-        return new_point[0]
+
+    def cam_translate(self, cam):
+        """
+        corrects the point so that the camera is in the middle of the coordinate space
+        """
+        xc, yc, zc = cam[0], cam[1], cam[2]
+        x, y, z = self.coordinate[0]
+        point = Matrix([[x-xc, y-yc, z-zc]])
+        return point
+
+
+    def project(self, camera):
+        #self.infront_of_cam(camera)
+        if self.in_view == True:
+            translated_point = self.cam_translate(camera)
+            d = -translated_point[0][2]
+            z = 1/(d+0.00000000000000001)
+            projection_matrix = Matrix([[1, 0, 0],
+                                        [0, 1, 0],
+                                        [0, 0, 0]])
+            # projection_matrix = Matrix([[z, 0, 0],
+            #                             [0, z, 0],
+            #                             [0, 0, 0]])
+            new_point = translated_point * projection_matrix
+            return new_point[0]
+        else:
+            return False
 
 
     def rotate_x(self, angle):
@@ -187,6 +199,7 @@ class Point():
         rotateY = Matrix([[m.cos(angle), 0, -m.sin(angle)],
                           [0, 1, 0],
                           [m.sin(angle), 0, m.cos(angle)]])
+
         self.coordinate *= rotateY
 
 
@@ -197,8 +210,5 @@ class Point():
         rotateZ = Matrix([[m.cos(angle), -m.sin(angle), 0],
                           [m.sin(angle), m.cos(angle), 0],
                           [0, 0, 1]])
-        for shape in self.all_shapes:
-            for point in shape:
-                point = point * rotateZ
 
         self.coordinate *= rotateZ
