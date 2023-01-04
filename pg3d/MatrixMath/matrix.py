@@ -5,7 +5,6 @@ def zeroes(height, width):
     """
     return Matrix([[0 for w in range(width)] for h in range(height)])
 
-
 def identity(n):
     """
     Returns an identity matrix of size n x n
@@ -16,10 +15,22 @@ def identity(n):
 
     return matrix
 
-
 def copy_matrix(matrix):
     return Matrix([[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))])
 
+def dot(a, b):
+    result = zeroes(a.height, b.width)
+
+    for height in range(a.height):
+        for width in range(b.width):
+            sum = 0
+            
+            for b_height in range(a.width):
+                sum += a.matrix[height][b_height] * b[b_height][width]
+
+            result[height][width] = sum
+    
+    return result
 
 class Matrix():
     def __init__(self, matrix):
@@ -30,10 +41,9 @@ class Matrix():
         self.width = len(self.matrix[0])
         self.height = len(self.matrix)
 
-
     def __repr__(self):
         """
-        Defines behavior of printing a matrix object
+        Defines behaviour of printing a matrix object
         """
         print("[",end="")
         # loop that iterates through every item of the matrix
@@ -41,7 +51,6 @@ class Matrix():
 
             print("[",end="")
             for width in range(self.width):
-
                 if width != self.width-1: # if the number is'nt the last in its row
                     print(f"{self.matrix[height][width]}, ",end="")
 
@@ -58,7 +67,6 @@ class Matrix():
 
         return ("")
 
-
     def __setitem__(self, index, value):
         """
         Defines the behaviour of changing the value of the matrix at a specific value
@@ -68,7 +76,7 @@ class Matrix():
 
     def __getitem__(self, index):
         """
-        Defines behavior of using square brackets on matrix objects
+        Defines behaviour of using square brackets on matrix objects
 
         E.g:
         > a = Matrix([1,2,3],[4,5,6])
@@ -77,86 +85,66 @@ class Matrix():
         """
         return self.matrix[index] 
 
-
     def __rmul__(self, value):
         """
-        Defines behavior of multiplying matrix object with non-matrix object
+        Defines behaviour of multiplying matrix object with non-matrix object which is to the right of the matrix
         """
         if isinstance(value, int) or isinstance(value, float): # checks if the value is a number
             result = zeroes(self.height, self.width)
 
             # iterates through each number and multiplies it with the value
             for height in range(self.height):
-
                 for width in range(self.width):
-                    result[height][width] =  self.matrix[height][width] * value
+                    result[height][width] = self.matrix[height][width] * value
             
             return result
 
         else:
             return "ERROR OCCURRED"
 
-
     def __mul__(self, other):
         """
-        Defines the behavior of the * operator for multiplication
+        Defines the behaviour of the * operator for multiplication
         """
         try:
             if self.width == other.height:
-                result = zeroes(self.height, other.width)
-
-                for height in range(self.height):
-
-                    for width in range(other.width):
-                        sum = 0
-
-                        for other_height in range(self.width):
-                            sum += self.matrix[height][other_height] * other[other_height][width]
-
-                        result[height][width] = sum
-
-                return result
-
-            elif other.width == self.height:
-                result = zeroes(other.height, self.width)
-
-                for height in range(other.height):
-
-                    for width in range(self.width):
-                        sum = 0
-
-                        for other_height in range(other.width):
-                            sum += other[height][other_height] * self.matrix[other_height][width]
-
-                        result[height][width] = sum
-
-                return result
-
+                return dot(self, other)
             else:
-                return ("ROWS OF ONE MATRIX MUST EQUAL COLUMNS OF THE OTHER")
-
+                return "COLUMNS OF MATRIX A MUST EQUAL ROWS OF MATRIX B"
         except:
-            return ("ERROR OCCURRED")
-    
+            return "ERROR OCCURRED"
 
-    def identity(self, n):
+    def __add__(self, other):
         """
-        Returns an identity matrix of size n x n
+        Defines the behaviour of the + operator for addition
         """
-        matrix = zeroes(n, n)
-        # iterates through each value of matrix
-        for i in range(len(matrix)):
+        try:
+            if (self.height == other.height) and (self.width == other.width):
+                result = zeroes(self.height, self.width)
+                for height in range(self.height):
+                    for width in range(self.width):
+                        result[height][width] = self[height][width] + other[height][width]
+                return result
+            else:
+                return "CANNOT ADD MATRICES WITH DIFFERENT SHAPE"
+        except:
+            return "ERROR OCCURRED"
 
-            for j in range(len(matrix)):
-
-                if i == j: # is a diagonal
-                    matrix[i][j] = 1
-
-                else: # isnt a diagonal
-                    matrix[i][j] = 0
-
-        return matrix
-
+    def __sub__(self, other):
+        """
+        Defines the behaviour of the - operator for subtraction
+        """
+        try:
+            if (self.height == other.height) and (self.width == other.width):
+                result = zeroes(self.height, self.width)
+                for height in range(self.height):
+                    for width in range(self.width):
+                        result[height][width] = self[height][width] - other[height][width]
+                return result
+            else:
+                return "CANNOT SUBTRACT MATRICES WITH DIFFERENT SHAPE"
+        except:
+            return "ERROR OCCURRED"
 
     def transpose(self):
         """
@@ -165,7 +153,6 @@ class Matrix():
         # 1. uses the zip function to transpose the unpacked matrix
         # 2. uses the map function to turn the sets into lists
         return Matrix(list(map(list,zip(*self.matrix))))
-
 
     def minor(self, i, j):
         """
@@ -178,7 +165,6 @@ class Matrix():
         else:
             print("CANNOT FIND MINOR OF NON-SQUARE MATRIX")
     
-
     def determinant(self):
         """
         Returns the determinant of a function using the method of cofactors
@@ -218,7 +204,7 @@ class Matrix():
                 M_copy = copy_matrix(self.matrix)
                 I_copy = copy_matrix(I.matrix)
                 
-                indicies = list(range(self.height)) # list of all the indicies in the matrix row
+                indices = list(range(self.height)) # list of all the indices in the matrix row
 
                 for cd in range(self.height): # cd = current diagonal
                     cd_factor = 1 / M_copy[cd][cd]
@@ -229,7 +215,7 @@ class Matrix():
                         M_copy[cd][i] *= cd_factor
                         I_copy[cd][i] *= cd_factor
                 
-                    for j in indicies[:cd] + indicies[cd+1:]:
+                    for j in indices[:cd] + indices[cd+1:]:
                         cr_factor = M_copy[j][cd] # cr = current row
 
                         # subtract the current value by the pivot on its row multiplied by the value on the row above
@@ -238,7 +224,6 @@ class Matrix():
                             I_copy[j][k] -= (I_copy[cd][k] * cr_factor)
 
                 return I_copy
-
 
     def is_square(self):
         """

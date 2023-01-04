@@ -1,10 +1,10 @@
 from pg3d import *
 
-new_app = pg3d.App([1000, 800])
+new_app = pg3d.App([800,800])
 
-vertices = [
+cubes = [
     # Front face
-    [-100, -100,  1.0, 1.0],  # Bottom left
+    [[-100, -100,  1.0, 1.0],  # Bottom left
     [ 100, -100,  1.0, 1.0],  # Bottom right
     [ 100,  100,  1.0, 1.0],  # Top right
     [-100,  100,  1.0, 1.0],  # Top left
@@ -12,7 +12,43 @@ vertices = [
     [-100, -100, -1.0, 1.0],  # Bottom left
     [ 100, -100, -1.0, 1.0],  # Bottom right
     [ 100,  100, -1.0, 1.0],  # Top right
-    [-100,  100, -1.0, 1.0],  # Top left
+    [-100,  100, -1.0, 1.0]],  # Top left
+
+
+    # Front face
+    [[-100, -100,  4.0, 1.0],  # Bottom left
+    [ 100, -100,  4.0, 1.0],  # Bottom right
+    [ 100,  100,  4.0, 1.0],  # Top right
+    [-100,  100,  4.0, 1.0],  # Top left
+    # Back face
+    [-100, -100, 2.0, 1.0],  # Bottom left
+    [ 100, -100, 2.0, 1.0],  # Bottom right
+    [ 100,  100, 2.0, 1.0],  # Top right
+    [-100,  100, 2.0, 1.0]],  # Top left
+
+
+    # Front face
+    [[200, -100,  1.0, 1.0],  # Bottom left
+    [ 400, -100,  1.0, 1.0],  # Bottom right
+    [ 400,  100,  1.0, 1.0],  # Top right
+    [200,  100,  1.0, 1.0],  # Top left
+    # Back face
+    [200, -100, -1.0, 1.0],  # Bottom left
+    [ 400, -100, -1.0, 1.0],  # Bottom right
+    [ 400,  100, -1.0, 1.0],  # Top right
+    [200,  100, -1.0, 1.0]],  # Top left
+
+
+    # Front face
+    [[200, -100,  4.0, 1.0],  # Bottom left
+    [ 400, -100,  4.0, 1.0],  # Bottom right
+    [ 400,  100,  4.0, 1.0],  # Top right
+    [200,  100,  4.0, 1.0],  # Top left
+    # Back face
+    [200, -100, 2.0, 1.0],  # Bottom left
+    [ 400, -100, 2.0, 1.0],  # Bottom right
+    [ 400,  100, 2.0, 1.0],  # Top right
+    [200,  100, 2.0, 1.0]],  # Top left
 ]
 
 indices = [
@@ -36,8 +72,27 @@ indices = [
     [1, 0, 4],  # Second triangle
 ]
 
-for tri in indices:
-    pg3d.Triangle(new_app, vertices[tri[0]], vertices[tri[1]], vertices[tri[2]])
+
+cubes = [
+    # Front face
+    [[-100, -100,  5.0, 1.0],  # Bottom left
+    [ 100, -100,  5.0, 1.0],  # Bottom right
+    [ 100,  100,  5.0, 1.0],  # Top right
+    [-100,  100,  5.0, 1.0],  # Top left
+    # Back face
+    [-100, -100, 3.0, 1.0],  # Bottom left
+    [ 100, -100, 3.0, 1.0],  # Bottom right
+    [ 100,  100, 3.0, 1.0],  # Top right
+    [-100,  100, 3.0, 1.0]]  # Top left
+]
+
+# for cube in cubes:
+#     for tri in indices:
+#         pg3d.Triangle(new_app, cube[tri[0]], cube[tri[1]], cube[tri[2]])
+
+for cube in cubes:
+    for point in cube:
+        pg3d.Point(new_app, point)
 
 if __name__ == "__main__":
     new_app.run()

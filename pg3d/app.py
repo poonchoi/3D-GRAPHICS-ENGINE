@@ -13,23 +13,24 @@ class App:
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
-        self.world = World(self.RES, self.screen, self)
 
+        self.world = World(self)
+        
 
-    def add_point(self, point):
-        self.world.add_point(point)
+    # def add_point(self, point):
+    #     self.world.add_point(point)
     
     
-    def add_triangle(self, triangle):
-        self.world.add_triangle(triangle)
+    # def add_triangle(self, triangle):
+    #     self.world.add_triangle(triangle)
 
 
     def run(self):
         """
-        the main loop
+        The main loop of the program
         """
         while True:
-            self.world.check_movement()
+            self.world.camera.check_movement()
             self.world.draw()
 
             [exit() for i in pg.event.get() if i.type == pg.QUIT]

@@ -18,17 +18,17 @@ class Camera:
     def control(self):
         key = pg.key.get_pressed()
         if key[pg.K_a]:
-            self.position -= self.right * self.moving_speed
+            self.position -= (self.right * self.moving_speed)
         if key[pg.K_d]:
-            self.position += self.right * self.moving_speed
+            self.position += (self.right * self.moving_speed)
         if key[pg.K_w]:
-            self.position += self.forward * self.moving_speed
+            self.position += (self.forward * self.moving_speed)
         if key[pg.K_s]:
-            self.position -= self.forward * self.moving_speed
+            self.position -= (self.forward * self.moving_speed)
         if key[pg.K_q]:
-            self.position += self.up * self.moving_speed
+            self.position += (self.up * self.moving_speed)
         if key[pg.K_e]:
-            self.position -= self.up * self.moving_speed
+            self.position -= (self.up * self.moving_speed)
 
         if key[pg.K_LEFT]:
             self.camera_yaw(-self.rotation_speed)
