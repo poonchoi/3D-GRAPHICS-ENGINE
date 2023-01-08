@@ -3,6 +3,7 @@ import math as m
 import pg3d.MatrixMath.matrix as mm
 from pg3d.matrices import *
 
+
 class Camera():
     def __init__(self, position):
         self.position = mm.Matrix([position])
@@ -17,6 +18,7 @@ class Camera():
         self.rotation_speed = 0.001
         self.pitch_a = 0
         self.yaw_a = 0
+
 
     def check_movement(self):
         """
@@ -46,6 +48,7 @@ class Camera():
             self.pitch_a += self.rotation_speed
             self.pitch(self.pitch_a)
 
+
     def pitch(self, angle):
         """
         Rotates the camera along the x-axis
@@ -56,6 +59,7 @@ class Camera():
         self.right = self.right * rot
         self.forward = self.forward * rot
     
+
     def yaw(self, angle):
         """
         Rotates the camera along the y-axis
@@ -66,6 +70,7 @@ class Camera():
         self.right = self.right * rot
         self.forward = self.forward * rot
 
+
     def translate_matrix(self):
         """
         Returns a matrix which translates the point so that the camera is placed at the centre of the screen
@@ -75,6 +80,7 @@ class Camera():
                           [0, 1, 0, 0],
                           [0, 0, 1, 0],
                           [-x, -y, -z, 1]])
+
 
     def rotate_matrix(self):
         """
@@ -87,6 +93,7 @@ class Camera():
                           [ry, uy, fy, 0],
                           [rz, uz, fz, 0],
                           [0, 0, 0, 1]])
+
 
     def view_matrix(self):
         """
