@@ -72,6 +72,8 @@ class World():
     #                       [0, (2*n)/(t-b), (t+b)/(t-b), 0],
     #                       [0, 0, -(f+n)/(f-n), -(2*f*n)/(f-n)],
     #                       [0, 0, 1, 0]])
+
+
     def projection_matrix(self):
         """
         Creates the projection matrix to project the points onto the screen
@@ -126,7 +128,6 @@ class World():
     #                    [0, 1, 0, -y],
     #                    [0, 0, 1, -z],
     #                    [0, 0, 0, 1]])
-
 
     #     return R
 
