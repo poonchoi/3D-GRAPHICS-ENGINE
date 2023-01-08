@@ -2,7 +2,6 @@ import pg3d.MatrixMath.matrix as mm
 import math as m
 
 
-
 class Point():
     def __init__(self, app, coordinate, vertex=False):
         self.coordinate = mm.Matrix([coordinate])
