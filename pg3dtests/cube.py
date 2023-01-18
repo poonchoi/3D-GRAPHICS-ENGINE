@@ -4,13 +4,16 @@ from pg3d.triangle import Triangle
 
 class Cube:
     def __init__(self, app, centre, l):
-        """
-        __init__ method used to define coordinates of cube 
-        and coordinates of triangles.
-
-        Then triangles of the cube are made using the triangle class.
-        """
         x, y, z = centre
+        # self.points = [
+        #     Point(app, [x + l/2, y + l/2, z + l/2]),
+        #     Point(app, [x + l/2, y + l/2, z - l/2]),
+        #     Point(app, [x + l/2, y - l/2, z + l/2]),
+        #     Point(app, [x + l/2, y - l/2, z - l/2]),
+        #     Point(app, [x - l/2, y + l/2, z + l/2]),
+        #     Point(app, [x - l/2, y + l/2, z - l/2]),
+        #     Point(app, [x - l/2, y - l/2, z + l/2]),
+        #     Point(app, [x - l/2, y - l/2, z - l/2])]
 
         # creates the 8 vertices of the cube
         self.points = [
@@ -33,4 +36,4 @@ class Cube:
             [1, 5, 3], [3, 5, 7]]
         
         # creates all the triangles in the cube
-        self.triangles = [Triangle(app, self.points[triangle[0]], self.points[triangle[1]], self.points[triangle[2]]) for triangle in self.triangle_indices]
+        self.triangles = [Triangle(app, self.points[triangle[0]], self.points[triangle[1]], self.points[triangle[2]]) for triangle in self.triangle_indices]    
