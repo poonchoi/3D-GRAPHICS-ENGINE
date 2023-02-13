@@ -33,4 +33,4 @@ class Cube:
             [1, 5, 3], [3, 5, 7]]
         
         # creates all the triangles in the cube
-        self.triangles = [Triangle(app, self.points[triangle[0]], self.points[triangle[1]], self.points[triangle[2]]) for triangle in self.triangle_indices]    
+        self.triangles = [Triangle(app, self.points[triangle[0]], self.points[triangle[1]], self.points[triangle[2]]) for triangle in self.triangle_indices]

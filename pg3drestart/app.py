@@ -17,14 +17,6 @@ class App:
         self.world = World(self)
 
 
-    # def add_point(self, point):
-    #     self.world.add_point(point)
-
-
-    # def add_triangle(self, triangle):
-    #     self.world.add_triangle(triangle)
-
-
     def run(self):
         """
         The main loop of the program

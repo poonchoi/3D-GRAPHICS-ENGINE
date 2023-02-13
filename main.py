@@ -1,4 +1,5 @@
 from pg3d import *
+#from pg3dtests import *
 
 new_app = pg3d.App([800,800])
 
@@ -48,7 +49,7 @@ cubes = [
     [200, -100, 2.0, 1.0],  # Bottom left
     [ 400, -100, 2.0, 1.0],  # Bottom right
     [ 400,  100, 2.0, 1.0],  # Top right
-    [200,  100, 2.0, 1.0]],  # Top left
+    [200,  100, 2.0, 1.0]]  # Top left
 ]
 
 indices = [
@@ -69,7 +70,7 @@ indices = [
     [6, 7, 3],  # Second triangle
     # Bottom face
     [4, 5, 1],  # First triangle
-    [1, 0, 4],  # Second triangle
+    [1, 0, 4] # Second triangle
 ]
 
 
