@@ -1,4 +1,4 @@
-import pg3dmarch.MatrixMath.matrix as mm
+import numpy as np
 import math as m
 
 class Projection():
@@ -15,7 +15,8 @@ class Projection():
         m22 = (far + near) / (far - near)
         m32 = (-2 * far * near) / (far - near)
 
-        self.projection_matrix = mm.Matrix([[m00, 0, 0, 0],
-                                            [0, m11, 0, 0],
-                                            [0, 0, m22, 1],
-                                            [0, 0, m32, 0]])
+        self.projection_matrix = np.matrix([
+            [m00, 0, 0, 0],
+            [0, m11, 0, 0],
+            [0, 0, m22, 1],
+            [0, 0, m32, 0]])

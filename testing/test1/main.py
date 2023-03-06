@@ -7,7 +7,7 @@ import pygame as pg
 class SoftwareRender:
     def __init__(self):
         pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = 600, 600
+        self.RES = self.WIDTH, self.HEIGHT = 1000, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
@@ -15,7 +15,7 @@ class SoftwareRender:
         self.create_objects()
 
     def create_objects(self):
-        self.camera = Camera(self, [0,0,0])
+        self.camera = Camera(self, [0,0,-10])
         self.projection = Projection(self)
         self.object = self.get_object_from_file('resources/t_34_obj.obj')
 
@@ -31,7 +31,7 @@ class SoftwareRender:
         return Object3D(self, vertex, faces)
 
     def draw(self):
-        self.screen.fill(pg.Color('darkslategray'))
+        self.screen.fill(pg.Color('white'))
         self.object.draw()
 
     def run(self):

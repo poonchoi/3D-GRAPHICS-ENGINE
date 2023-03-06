@@ -16,7 +16,6 @@ class Camera:
         self.rotation_speed = 0.01
 
     def control(self):
-        print(self.position)
         key = pg.key.get_pressed()
         if key[pg.K_a]:
             self.position -= (self.right * self.moving_speed)
@@ -58,8 +57,7 @@ class Camera:
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
-            [-x, -y, -z, 1]
-        ])
+            [-x, -y, -z, 1]])
 
     def rotate_matrix(self):
         rx, ry, rz, w = self.right
@@ -69,8 +67,7 @@ class Camera:
             [rx, ux, fx, 0],
             [ry, uy, fy, 0],
             [rz, uz, fz, 0],
-            [0, 0, 0, 1]
-        ])
+            [0, 0, 0, 1]])
 
     def camera_matrix(self):
         return self.translate_matrix() @ self.rotate_matrix()

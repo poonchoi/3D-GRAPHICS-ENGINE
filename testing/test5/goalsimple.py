@@ -34,28 +34,34 @@ class App:
 
     def screen_proj(self, point):
         pointI = point * self.cam.cam_mat()
-        print(pointI)
+        print(pointI, point)
         pointII = pointI * self.proj_mat()
         print(pointII)
         x, y, z, w = pointII[0]
-
-        if not(w > 2 or w < -2 or w == 0):
-            x /= w
-            y /= w
-            z /= w
-            print(x, y, z)
+        if w == 0:
+            w = 1e-6
+        x /= w
+        y /= w
+        z /= w
+        if x > 2 or x < -2:
+            x = 0
+        elif y > 2 or y < -2:
+            y = 0
+        elif z > 2 or z < -2:
+            z = 0
             return [x, y, z]
-        else:
-            return None
 
     def draw(self):
         self.screen.fill((255, 255, 255))
-        points = [mm.Matrix([[0, 0, -3, 1]])]
+        points = [mm.Matrix([[0, 0, 0, 1]])]
+        mesh = [[mm.Matrix([[50,50,0,1]]), mm.Matrix([[50,50,-10,1]]), 
+                      mm.Matrix([[-50,-50,0,1]]), mm.Matrix([[-50,-50,-10,1]]), 
+                      mm.Matrix([[50,-50,0,1]]), mm.Matrix([[50,-50,-10,1]]), 
+                      mm.Matrix([[-50,50,0,1]]), mm.Matrix([[-50,50,-10,1]])]]
         
-        for point in points:
+        for point in mesh:
             proj = self.screen_proj(point)
-            if proj != None:
-                pg.draw.circle(self.screen, (0, 0, 0), (proj[0]+self.hwidth, proj[1]+self.hheight), 5)
+            pg.draw.circle(self.screen, (0, 0, 0), (proj[0]+self.hwidth, proj[1]+self.hheight),1)
 
 
     def run(self):

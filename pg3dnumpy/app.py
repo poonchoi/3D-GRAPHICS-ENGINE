@@ -1,7 +1,7 @@
 import pygame as pg
 from pg3dmarch.camera import Camera
 from pg3dmarch.projection import Projection
-import pg3dmarch.MatrixMath.matrix as mm
+import numpy as np
 
 
 class App:
@@ -19,10 +19,10 @@ class App:
         self.camera = Camera(self)
         self.projection = Projection(self)
 
-        self.mesh = [[mm.Matrix([[50,50,0,1]]), mm.Matrix([[50,50,-10,1]]), 
-                      mm.Matrix([[-50,-50,0,1]]), mm.Matrix([[-50,-50,-10,1]]), 
-                      mm.Matrix([[50,-50,0,1]]), mm.Matrix([[50,-50,-10,1]]), 
-                      mm.Matrix([[-50,50,0,1]]), mm.Matrix([[-50,50,-10,1]])]]
+        self.mesh = [[np.matrix([[50,50,0,1]]), np.matrix([[50,50,3,1]]), 
+                      np.matrix([[-50,-50,0,1]]), np.matrix([[-50,-50,3,1]]), 
+                      np.matrix([[50,-50,0,1]]), np.matrix([[50,-50,3,1]]), 
+                      np.matrix([[-50,50,0,1]]), np.matrix([[-50,50,3,1]])]]
         self.projected_mesh = []
 
     def project(self):
@@ -30,28 +30,18 @@ class App:
 
         for shape in self.mesh:
             for point in shape:
-                pointI = point * self.camera.camera_matrix() 
-                pointII = pointI * self.projection.projection_matrix
-                if pointII[0][3] == 0:
-                    pointII[0][3] = 1e-6
-                
-                pointIII = (1 / pointII[0][3]) * pointII
+                pointI = point @ self.camera.camera_matrix() 
+                pointII = pointI @ self.projection.projection_matrix
+                x, y, z, w = pointII[0]
 
-                print(point)
-
-                for i in range(3):
-                    pointIII[0][i] /= pointIII[0][3]
-                    if pointIII[0][i] > 2 or pointIII[0][i] < -2:
-                        pointIII[0][i] = 0
-
-                self.projected_mesh.append(pointIII)
+            shape[(shape > 2) | (shape < -2)] = 0
 
 
     def draw(self):
         self.screen.fill((255, 255, 255))
         self.project()
         for point in self.projected_mesh:
-            pg.draw.circle(self.screen, (0, 0, 0), (point[0][0]+self.h_width, point[0][1]+self.h_height), 1)
+            pg.draw.circle(self.screen, (0, 0, 0), (point[0]+self.h_width, point[1]+self.h_height), 5)
 
 
     def run(self):
