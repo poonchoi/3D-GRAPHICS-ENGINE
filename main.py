@@ -1,5 +1,5 @@
-from pg3d import *
-#from pg3dtests import *
+#from pg3d import *
+from pg3drestart import *
 
 new_app = pg3d.App([800,800])
 

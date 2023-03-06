@@ -16,12 +16,12 @@ class App:
 
     def draw(self):
         self.screen.fill((255,255,255))
-        points = [[-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1], [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]]
+        points = [[-5, -5, 5], [5, -5, 5], [5, 5, 5], [-5, 5, 5], [-5, -5, -5], [5, -5, -5], [5, 5, -5], [-5, 5, -5]]
         for i in points:
             print(i)
             p = self.project(i)
             print(p)
-            pg.draw.circle(self.screen, (0,0,0), (p[0], p[1]), 5)
+            pg.draw.circle(self.screen, (0,0,0), (p[0]+self.H_WIDTH, p[1]+self.H_HEIGHT), 5)
 
     def run(self):
         while True:

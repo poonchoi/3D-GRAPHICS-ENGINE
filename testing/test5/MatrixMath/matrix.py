@@ -5,7 +5,6 @@ def zeroes(height, width):
     """
     return Matrix([[0 for w in range(width)] for h in range(height)])
 
-
 def identity(n):
     """
     Returns an identity matrix of size n x n
@@ -16,10 +15,8 @@ def identity(n):
 
     return matrix
 
-
 def copy_matrix(matrix):
     return Matrix([[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))])
-
 
 def dot(a, b):
     result = zeroes(a.height, b.width)
@@ -35,7 +32,6 @@ def dot(a, b):
     
     return result
 
-
 class Matrix():
     def __init__(self, matrix):
         """
@@ -44,7 +40,6 @@ class Matrix():
         self.matrix = matrix
         self.width = len(self.matrix[0])
         self.height = len(self.matrix)
-
 
     def __repr__(self):
         """
@@ -72,7 +67,6 @@ class Matrix():
 
         return ("")
 
-
     def __setitem__(self, index, value):
         """
         Defines the behaviour of changing the value of the matrix at a specific value
@@ -91,7 +85,6 @@ class Matrix():
         """
         return self.matrix[index] 
 
-
     def __rmul__(self, value):
         """
         Defines behaviour of multiplying matrix object with non-matrix object which is to the right of the matrix
@@ -109,7 +102,6 @@ class Matrix():
         else:
             return "ERROR OCCURRED"
 
-
     def __mul__(self, other):
         """
         Defines the behaviour of the * operator for multiplication
@@ -121,7 +113,6 @@ class Matrix():
                 return "COLUMNS OF MATRIX A MUST EQUAL ROWS OF MATRIX B"
         except:
             return "ERROR OCCURRED"
-
 
     def __add__(self, other):
         """
@@ -139,7 +130,6 @@ class Matrix():
         except:
             return "ERROR OCCURRED"
 
-
     def __sub__(self, other):
         """
         Defines the behaviour of the - operator for subtraction
@@ -156,7 +146,6 @@ class Matrix():
         except:
             return "ERROR OCCURRED"
 
-
     def transpose(self):
         """
         Returns a transposed copy of the matrix
@@ -164,7 +153,6 @@ class Matrix():
         # 1. uses the zip function to transpose the unpacked matrix
         # 2. uses the map function to turn the sets into lists
         return Matrix(list(map(list,zip(*self.matrix))))
-
 
     def minor(self, i, j):
         """
@@ -177,7 +165,6 @@ class Matrix():
         else:
             print("CANNOT FIND MINOR OF NON-SQUARE MATRIX")
     
-
     def determinant(self):
         """
         Returns the determinant of a function using the method of cofactors
@@ -197,7 +184,6 @@ class Matrix():
         else:
             print("CANNOT FIND DETERMINANT OF A NON-SQUARE MATRIX")
     
-
     def inverse(self):
         """
         Returns the inverse of the matrix using Gauss-Jordan Elimination method
@@ -238,7 +224,6 @@ class Matrix():
                             I_copy[j][k] -= (I_copy[cd][k] * cr_factor)
 
                 return I_copy
-
 
     def is_square(self):
         """
