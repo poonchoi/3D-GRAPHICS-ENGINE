@@ -99,4 +99,5 @@ class Camera():
         """
         Returns the dot product of the translate and rotate matrices
         """
+        
         return self.translate_matrix() * self.rotate_matrix()
