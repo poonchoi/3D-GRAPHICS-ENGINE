@@ -10,7 +10,7 @@ class App:
         self.screen = pg.display.set_mode(self.res)
         self.clock = pg.time.Clock()
 
-        self.points = [[0, 0, 0]]
+        self.points = [[0, 0, 5]]
         self.fov = m.pi / 3
         self.f = 1 / m.tan(self.fov/2)
         self.zf = 10
@@ -20,12 +20,18 @@ class App:
 
     def draw(self):
         self.screen.fill((255, 255, 255))
+        x, y = self.project()
+        pg.draw.circle(self.screen, (0), (x+self.hwidth, y+self.hheight), 4)
 
     def project(self):
         for point in self.points:
             x = point[0]
             y = point[1]
             z = point[2]
+
+            x *= (self.a * self.fov) / z
+            y *= self.fov / z
+            return x, y
 
 
     def run(self):
