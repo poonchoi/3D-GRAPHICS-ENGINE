@@ -1,5 +1,6 @@
 import pygame as pg
 import math as m
+from MatrixMath import matrix as mm
 
 class App:
     def __init__(self):
@@ -10,9 +11,9 @@ class App:
         self.screen = pg.display.set_mode(self.res)
         self.clock = pg.time.Clock()
 
-        self.points = [[100, 100, 5],[100, -100, 5],[-100, -100, 5],[-100, 100, 5],
-                       [100, 100, 10],[100, -100, 10],[-100, -100, 10],[-100, 100, 10]]
-        # self.points = [[100,0,10],[100,0,1]]
+        self.points = [mm.Matrix([[100, 100, 5, 1]]),mm.Matrix([[100, -100, 5, 1]]),mm.Matrix([[-100, -100, 5, 1]]),mm.Matrix([[-100, 100, 5, 1]]),
+                       mm.Matrix([[100, 100, 10, 1]]),mm.Matrix([[100, -100, 10, 1]]),mm.Matrix([[-100, -100, 10, 1]]),mm.Matrix([[-100, 100, 10, 1]])]
+
         self.fov = m.pi / 3
         self.f = 1 / m.tan(self.fov/2)
         self.zf = 10
@@ -20,22 +21,27 @@ class App:
         self.g = self.zf / (self.zf - self.zn)
         self.a = self.height / self.width
 
+        self.proj = mm.Matrix([[self.a*self.f, 0, 0, 0],
+                               [0, self.f, 0, 0],
+                               [0, 0, self.zf/(self.zf-self.zn), 1],
+                               [0, 0, (-self.zf*self.zn) / (self.zf-self.zn), 0]])
+
     def draw(self):
         self.screen.fill((255, 255, 255))
         for point in self.points:
             x, y = self.project(point)
+
             pg.draw.circle(self.screen, (0), (x+self.hwidth, y+self.hheight), 4)
 
     def project(self, point):
-        x = point[0]
-        y = point[1]
-        z = point[2]
+        projected = point * self.proj
 
-        x *= (self.a * self.fov) / z
-        y *= self.fov / z
-        
-        return x, y
+        # projected[0][0] *= (self.a * self.fov) / point[0][2]
+        # projected[0][1] *= self.fov / point[0][2]
+        # print(projected)
+        print(projected)
 
+        return projected[0][0], projected[0][1]
 
     def run(self):
         while True:
