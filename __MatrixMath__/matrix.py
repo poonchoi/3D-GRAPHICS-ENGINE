@@ -33,7 +33,7 @@ def dot(a, b):
                 sum += a.matrix[height][b_height] * b[b_height][width]
 
             result[height][width] = sum
-
+    
     return result
 
 class Matrix():
