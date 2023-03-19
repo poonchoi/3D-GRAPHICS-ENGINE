@@ -11,6 +11,7 @@ class App:
         self.screen = pg.display.set_mode(self.res)
         self.clock = pg.time.Clock()
 
+        # vertices of cube
         self.points = [mm.Matrix([[100, 100, 1, 1]]),mm.Matrix([[100, -100, 1, 1]]),mm.Matrix([[-100, -100, 1, 1]]),mm.Matrix([[-100, 100, 1, 1]]),
                        mm.Matrix([[100, 100, 3, 1]]),mm.Matrix([[100, -100, 3, 1]]),mm.Matrix([[-100, -100, 3, 1]]),mm.Matrix([[-100, 100, 3, 1]])]
 
@@ -51,12 +52,6 @@ class App:
 
     def draw(self):
         self.screen.fill((255, 255, 255))
-        # for point in self.points:
-        #     point = self.rotz(point)
-        #     projected = self.project(point)
-        #     if projected != None:
-        #         x, y = projected[0], projected[1]
-        #         pg.draw.circle(self.screen, (0), (x + self.hwidth, y + self.hheight), 1)
 
         for i in range(len(self.points)):
             self.points[i] = self.rotz(self.points[i])
