@@ -19,14 +19,19 @@ class App:
         self.a = self.height / self.width
         self.angle = 0.01
 
-        self.proj = np.array([
-            [self.a*self.f, 0, 0, 0],
-            [0, self.a*self.f, 0, 0],
-            [0, 0, self.zf/(self.zf-self.zn), 1],
-            [0, 0, (-self.zf*self.zn)/(self.zf-self.zn), 0]])
+        m00 = self.a * self.f
+        m11 = self.a * self.f
+        m22 = self.g
+        m23 = -self.zn * self.g
+
+        self.proj = np.array([[m00, 0, 0, 0],
+                              [0, m11, 0, 0],
+                              [0, 0, m22, 1],
+                              [0, 0, m23, 0]])
         
-        self.points = [np.array([100, 100, 1, 1]),np.array([100, -100, 1, 1]),np.array([-100, -100, 1, 1]),np.array([-100, 100, 1, 1]),
-                       np.array([100, 100, 3, 1]),np.array([100, -100, 3, 1]),np.array([-100, -100, 3, 1]),np.array([-100, 100, 3, 1])]
+        self.points = [np.array([500, 500, 6, 1]),np.array([500, -500, 6, 1]),np.array([-500, -500, 6, 1]),np.array([-500, 500, 6, 1]),
+                       np.array([500, 500, 3, 1]),np.array([500, -500, 3, 1]),np.array([-500, -500, 3, 1]),np.array([-500, 500, 3, 1])]
+        # self.points = [np.array([-100,-100,1,1]), np.array([100,-100,1,1]), np.array([0,500,1,1])]
 
     def rotx(self):
         rotx = np.array([[1, 0, 0, 0],
@@ -36,9 +41,9 @@ class App:
         return rotx
     
     def roty(self):
-        roty = np.array([[m.cos(self.angle), 0, m.sin(self.angle), 0],
+        roty = np.array([[m.cos(self.angle), 0, -m.sin(self.angle), 0],
                           [0, 1, 0, 0],
-                          [-m.sin(self.angle), 0, m.cos(self.angle), 0],
+                          [m.sin(self.angle), 0, m.cos(self.angle), 0],
                           [0, 0, 0, 1]])
         return roty
     
@@ -64,9 +69,14 @@ class App:
         self.screen.fill((255, 255, 255))
 
         for i in range(len(self.points)):
-            #self.points[i] = self.points[i] @ self.roty()
-            self.points[i] = self.points[i] @ self.rotz()
+            print(self.points[i])
+            # self.points[i] = self.points[i] @ self.rotx()
+            # self.points[i] = self.points[i] @ self.roty()
+            self.points[i] = self.points[i] @ self.rotx()
+            print(self.points[i])
             projected = self.project(self.points[i])
+            print(self.points[i])
+            print("####")
             if projected != None:
                 x, y = projected[0], projected[1]
                 pg.draw.circle(self.screen, (0), (x + self.hwidth, y + self.hheight), 1)
