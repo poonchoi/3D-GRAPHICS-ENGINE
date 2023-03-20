@@ -15,7 +15,7 @@ MAGENTA = (255, 0, 255)
 class App:
     def __init__(self):
         pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = 600, 600
+        self.RES = self.WIDTH, self.HEIGHT = 900, 900
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.FPS = 100
         self.screen = pg.display.set_mode(self.RES)
@@ -89,18 +89,19 @@ class App:
         self.angle += 0.01
         self.screen.fill(WHITE)
         points = [[3, -1, 3], [5, -1, 3], [5, 1, 3], [3, 1, 3], [3, -1, -3], [5, -1, -3], [5, 1, -3], [3, 1, -3]]
-        #[0,0,0],[-1,1,1],[1,1,1],[-1,-1,1],[1,-1, 1],[-1,1,-1],[1,1,-1],[-1,-1,-1],[1,-1,-1]
+        #points =[[0,0,0],[-1,1,1],[1,1,1],[-1,-1,1],[1,-1, 1],[-1,1,-1],[1,1,-1],[-1,-1,-1],[1,-1,-1]]
         projected_points = [[n, n] for n in range(len(points))]
         i = 0
         for point in points:
             rotated = self.rotateY(point, self.angle)
-            #rotated = self.rotateX(rotated, self.angle)
-            #rotated = self.translate(rotated, [0,0,-self.angle*5])
+            # rotated = self.rotateX(rotated, self.angle)
+            # rotated = self.rotateZ(rotated, self.angle)
+            #rotated = self.translate(rotated, [0,0,self.angle*5])
             projected = self.project(rotated)
             x = projected[0] * self.scale + self.H_WIDTH
             y = projected[1] * self.scale + self.H_HEIGHT
             projected_points[i] = x, y
-            pg.draw.circle(self.screen, BLACK, (x, y), 2)
+            pg.draw.circle(self.screen, BLACK, (x, y), 1)
             i += 1
 
         
