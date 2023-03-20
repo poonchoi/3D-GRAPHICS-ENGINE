@@ -36,9 +36,9 @@ class App:
         return point * rotx
     
     def roty(self, point):
-        roty = mm.Matrix([[m.cos(self.angle), 0, m.sin(self.angle), 0],
+        roty = mm.Matrix([[m.cos(self.angle), 0, -m.sin(self.angle), 0],
                           [0, 1, 0, 0],
-                          [-m.sin(self.angle), 0, m.cos(self.angle), 0],
+                          [m.sin(self.angle), 0, m.cos(self.angle), 0],
                           [0, 0, 0, 1]])
         return point * roty
     
@@ -47,7 +47,7 @@ class App:
                           [m.sin(self.angle), m.cos(self.angle), 0, 0],
                           [0, 0, 1, 0],
                           [0, 0, 0, 1]])
-        return point * rotz 
+        return point * rotz
 
 
     def draw(self):
