@@ -15,7 +15,7 @@ class App:
         self.points = [mm.Matrix([[100, 100, 1, 1]]),mm.Matrix([[100, -100, 1, 1]]),mm.Matrix([[-100, -100, 1, 1]]),mm.Matrix([[-100, 100, 1, 1]]),
                        mm.Matrix([[100, 100, 3, 1]]),mm.Matrix([[100, -100, 3, 1]]),mm.Matrix([[-100, -100, 3, 1]]),mm.Matrix([[-100, 100, 3, 1]])]
 
-        self.fov = m.pi / 2
+        self.fov = m.pi / 1.5
         self.f = 1 / m.tan(self.fov/2)
         self.zf = 1000
         self.zn = .1
@@ -27,6 +27,7 @@ class App:
                                [0, self.a*self.f, 0, 0],
                                [0, 0, self.zf/(self.zf-self.zn), 1],
                                [0, 0, (-self.zf*self.zn) / (self.zf-self.zn), 0]])
+
 
     def rotx(self, point):
         rotx = mm.Matrix([[1, 0, 0, 0],
@@ -47,14 +48,14 @@ class App:
                           [m.sin(self.angle), m.cos(self.angle), 0, 0],
                           [0, 0, 1, 0],
                           [0, 0, 0, 1]])
-        return point * rotz
-
+        return point * rotz 
+    
 
     def draw(self):
         self.screen.fill((255, 255, 255))
 
         for i in range(len(self.points)):
-            self.points[i] = self.rotz(self.points[i])
+            self.points[i] = self.roty(self.points[i])
             projected = self.project(self.points[i])
 
             if projected != None:
@@ -80,6 +81,7 @@ class App:
             pg.display.set_caption(f"{round(self.clock.get_fps())} FPS")
             pg.display.flip()
             self.clock.tick(self.fps)
+
 
 if __name__ == "__main__":
     app = App()
