@@ -12,21 +12,27 @@ class App:
         self.clock = pg.time.Clock()
 
         # vertices of cube
-        self.points = [mm.Matrix([[100, 100, 1, 1]]),mm.Matrix([[100, -100, 1, 1]]),mm.Matrix([[-100, -100, 1, 1]]),mm.Matrix([[-100, 100, 1, 1]]),
-                       mm.Matrix([[100, 100, 3, 1]]),mm.Matrix([[100, -100, 3, 1]]),mm.Matrix([[-100, -100, 3, 1]]),mm.Matrix([[-100, 100, 3, 1]])]
-
-        self.fov = m.pi / 1.5
-        self.f = 1 / m.tan(self.fov/2)
+        self.points = [mm.Matrix([[100, 100, 100, 1]]),mm.Matrix([[100, -100, 100, 1]]),mm.Matrix([[-100, -100, 100, 1]]),mm.Matrix([[-100, 100, 100, 1]]),
+                       mm.Matrix([[100, 100, 10, 1]]),mm.Matrix([[100, -100, 10, 1]]),mm.Matrix([[-100, -100, 10, 1]]),mm.Matrix([[-100, 100, 10, 1]])]
+        #self.points = [mm.Matrix([[0, 100, 3, 1]])]
+        self.fov = 45
+        self.f = 1 / m.tan(m.radians(self.fov)/2)
         self.zf = 1000
         self.zn = .1
         self.g = self.zf / (self.zf - self.zn)
+        print(-self.zn*self.g)
         self.a = self.height / self.width
-        self.angle = 0.01
+        self.angle = m.radians(1)
 
         self.proj = mm.Matrix([[self.a*self.f, 0, 0, 0],
                                [0, self.a*self.f, 0, 0],
                                [0, 0, self.zf/(self.zf-self.zn), 1],
                                [0, 0, (-self.zf*self.zn) / (self.zf-self.zn), 0]])
+        
+        # self.proj = mm.Matrix([[self.a*self.f, 0, 0, 0],
+        #                        [0, self.a*self.f, 0, 0],
+        #                        [0, 0, self.g, 1],
+        #                        [0, 0, -self.zn*self.g, 0]])
 
 
     def rotx(self, point):
@@ -37,9 +43,9 @@ class App:
         return point * rotx
     
     def roty(self, point):
-        roty = mm.Matrix([[m.cos(self.angle), 0, -m.sin(self.angle), 0],
+        roty = mm.Matrix([[m.cos(self.angle), 0, m.sin(self.angle), 0],
                           [0, 1, 0, 0],
-                          [m.sin(self.angle), 0, m.cos(self.angle), 0],
+                          [-m.sin(self.angle), 0, m.cos(self.angle), 0],
                           [0, 0, 0, 1]])
         return point * roty
     
@@ -55,12 +61,19 @@ class App:
         self.screen.fill((255, 255, 255))
 
         for i in range(len(self.points)):
+            print(self.points[i])
             self.points[i] = self.roty(self.points[i])
             projected = self.project(self.points[i])
-
             if projected != None:
                 x, y = projected[0], projected[1]
                 pg.draw.circle(self.screen, (0), (x + self.hwidth, y + self.hheight), 1)
+            print(self.points[i])
+            # self.project_ortho(self.points[i])
+            
+    
+    def project_ortho(self, point):
+        pg.draw.circle(self.screen, (0), (point[0][0] + self.hwidth, point[0][1] + self.hheight), 1)
+
 
     def project(self, point):
         projected = point * self.proj
@@ -68,8 +81,11 @@ class App:
         if projected[0][3] != 0:
             projected[0][0] /= projected[0][3]
             projected[0][1] /= projected[0][3]
+            projected[0][2] /= projected[0][3]
+            projected[0][3] /= projected[0][3]
 
-            return (projected[0][0], projected[0][1])
+
+            return (projected[0][0], projected[0][1], projected[0][2], projected[0][3])
         else:
             return None
 
