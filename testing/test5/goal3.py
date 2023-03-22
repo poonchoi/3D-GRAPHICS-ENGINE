@@ -20,7 +20,6 @@ class App:
         self.zf = 1000
         self.zn = .1
         self.g = self.zf / (self.zf - self.zn)
-        print(-self.zn*self.g)
         self.a = self.height / self.width
         self.angle = m.radians(1)
 
@@ -61,14 +60,9 @@ class App:
         self.screen.fill((255, 255, 255))
 
         for i in range(len(self.points)):
-            print(self.points[i])
             self.points[i] = self.roty(self.points[i])
-            projected = self.project(self.points[i])
-            if projected != None:
-                x, y = projected[0], projected[1]
-                pg.draw.circle(self.screen, (0), (x + self.hwidth, y + self.hheight), 1)
-            print(self.points[i])
-            # self.project_ortho(self.points[i])
+            #self.project(self.points[i])
+            #self.project_ortho(self.points[i])
             
     
     def project_ortho(self, point):
@@ -84,10 +78,11 @@ class App:
             projected[0][2] /= projected[0][3]
             projected[0][3] /= projected[0][3]
 
+            x, y = projected[0][0], projected[0][1]
+            pg.draw.circle(self.screen, (0), (x + self.hwidth, y + self.hheight), 1)
 
             return (projected[0][0], projected[0][1], projected[0][2], projected[0][3])
-        else:
-            return None
+
 
     def run(self):
         while True:
