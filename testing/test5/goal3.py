@@ -12,13 +12,13 @@ class App:
         self.clock = pg.time.Clock()
 
         # vertices of cube
-        self.points = [mm.Matrix([[100, 100, 100, 1]]),mm.Matrix([[100, -100, 100, 1]]),mm.Matrix([[-100, -100, 100, 1]]),mm.Matrix([[-100, 100, 100, 1]]),
+        self.points = [mm.Matrix([[100, 100, 1, 1]]),mm.Matrix([[100, -100, 1, 1]]),mm.Matrix([[-100, -100, 1, 1]]),mm.Matrix([[-100, 100, 1, 1]]),
                        mm.Matrix([[100, 100, 10, 1]]),mm.Matrix([[100, -100, 10, 1]]),mm.Matrix([[-100, -100, 10, 1]]),mm.Matrix([[-100, 100, 10, 1]])]
         #self.points = [mm.Matrix([[0, 100, 3, 1]])]
-        self.fov = 45
-        self.f = 1 / m.tan(m.radians(self.fov)/2)
-        self.zf = 1000
-        self.zn = .1
+        self.fov = 90
+        self.f = 1 / m.tan(m.radians(self.fov/2))
+        self.zf = .1
+        self.zn = 100
         self.g = self.zf / (self.zf - self.zn)
         self.a = self.height / self.width
         self.angle = m.radians(1)
@@ -60,8 +60,9 @@ class App:
         self.screen.fill((255, 255, 255))
 
         for i in range(len(self.points)):
-            self.points[i] = self.roty(self.points[i])
-            #self.project(self.points[i])
+            #self.points[i] = self.rotx(self.points[i])
+            #self.points[i] = self.roty(self.points[i])
+            self.project(self.points[i])
             #self.project_ortho(self.points[i])
             
     
