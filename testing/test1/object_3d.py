@@ -32,9 +32,7 @@ class Object3D:
         vertices = self.vertices @ self.render.camera.camera_matrix()
         vertices = vertices @ self.render.projection.projection_matrix
         vertices /= vertices[:, -1].reshape(-1, 1)
-        print(vertices)
         vertices[(vertices > 2) | (vertices < -2)] = 0
-        print(vertices)
         vertices = vertices @ self.render.projection.to_screen_matrix
         vertices = vertices[:, :2]
 
