@@ -15,7 +15,7 @@ class App:
         self.points = [mm.Matrix([[100, 100, 1, 1]]),mm.Matrix([[100, -100, 1, 1]]),mm.Matrix([[-100, -100, 1, 1]]),mm.Matrix([[-100, 100, 1, 1]]),
                        mm.Matrix([[100, 100, 10, 1]]),mm.Matrix([[100, -100, 10, 1]]),mm.Matrix([[-100, -100, 10, 1]]),mm.Matrix([[-100, 100, 10, 1]])]
         #self.points = [mm.Matrix([[0, 100, 3, 1]])]
-        self.points = [mm.Matrix([[-1, 1, 1, 1]]), mm.Matrix([[1, -1, 1, 1]]), mm.Matrix([[1, 1, 1, 1]]), mm.Matrix([[-1, -1, 1, 1]]),
+        self.points = [mm.Matrix([[-1, 1, 10, 1]]), mm.Matrix([[1, -1, 10, 1]]), mm.Matrix([[1, 1, 10, 1]]), mm.Matrix([[-1, -1, 10, 1]]),
                        mm.Matrix([[-1, 1, -1, 1]]), mm.Matrix([[1, -1, -1, 1]]), mm.Matrix([[1, 1, -1, 1]]), mm.Matrix([[-1, -1, -1, 1]])]
         self.fov = 90
         self.f = 1 / m.tan(m.radians(self.fov/2))
@@ -64,7 +64,7 @@ class App:
         for i in range(len(self.points)):
             self.points[i] = self.roty(self.points[i])
             rotated = mm.copy_matrix(self.points[i])
-            rotated += mm.Matrix([[0, 0, 4, 1]])
+            rotated += mm.Matrix([[0, 0, 6, 1]])
             self.project(rotated)
             
     
@@ -81,8 +81,11 @@ class App:
             projected[0][2] /= projected[0][3]
             projected[0][3] /= projected[0][3]
             
-            x, y = (projected[0][0] + 1) * self.hwidth, (projected[0][1] + 1) * self.hheight
-            pg.draw.circle(self.screen, (0), (x, y), 5)
+            x, y = projected[0][0], projected[0][1]
+            if (x < 2 and x > -2) and (y < 2 and y > -2):
+                x, y = (projected[0][0] + 1) * self.hwidth, (projected[0][1] + 1) * self.hheight
+                pg.draw.circle(self.screen, (0), (x, y), (5/projected[0][2]))
+            #self.screen.set_at((int(x), int(y)), (0))
 
 
     def run(self):
