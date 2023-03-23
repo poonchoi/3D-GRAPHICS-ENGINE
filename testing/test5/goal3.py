@@ -5,7 +5,7 @@ from MatrixMath import matrix as mm
 class App:
     def __init__(self):
         pg.init()
-        self.res = self.width, self.height = 1000, 700
+        self.res = self.width, self.height = 900, 500
         self.hwidth, self.hheight = self.width / 2, self.height / 2
         self.fps = 60
         self.screen = pg.display.set_mode(self.res)
@@ -15,23 +15,25 @@ class App:
         self.points = [mm.Matrix([[100, 100, 1, 1]]),mm.Matrix([[100, -100, 1, 1]]),mm.Matrix([[-100, -100, 1, 1]]),mm.Matrix([[-100, 100, 1, 1]]),
                        mm.Matrix([[100, 100, 10, 1]]),mm.Matrix([[100, -100, 10, 1]]),mm.Matrix([[-100, -100, 10, 1]]),mm.Matrix([[-100, 100, 10, 1]])]
         #self.points = [mm.Matrix([[0, 100, 3, 1]])]
+        self.points = [mm.Matrix([[-1, 1, 1, 1]]), mm.Matrix([[1, -1, 1, 1]]), mm.Matrix([[1, 1, 1, 1]]), mm.Matrix([[-1, -1, 1, 1]]),
+                       mm.Matrix([[-1, 1, -1, 1]]), mm.Matrix([[1, -1, -1, 1]]), mm.Matrix([[1, 1, -1, 1]]), mm.Matrix([[-1, -1, -1, 1]])]
         self.fov = 90
         self.f = 1 / m.tan(m.radians(self.fov/2))
-        self.zf = .1
-        self.zn = 100
+        self.zf = 1000
+        self.zn = .1
         self.g = self.zf / (self.zf - self.zn)
         self.a = self.height / self.width
         self.angle = m.radians(1)
 
-        self.proj = mm.Matrix([[self.a*self.f, 0, 0, 0],
-                               [0, self.a*self.f, 0, 0],
-                               [0, 0, self.zf/(self.zf-self.zn), 1],
-                               [0, 0, (-self.zf*self.zn) / (self.zf-self.zn), 0]])
-        
         # self.proj = mm.Matrix([[self.a*self.f, 0, 0, 0],
-        #                        [0, self.a*self.f, 0, 0],
-        #                        [0, 0, self.g, 1],
-        #                        [0, 0, -self.zn*self.g, 0]])
+        #                        [0, self.f, 0, 0],
+        #                        [0, 0, self.zf/(self.zf-self.zn), 1],
+        #                        [0, 0, (-self.zf*self.zn) / (self.zf-self.zn), 0]])
+        
+        self.proj = mm.Matrix([[self.a*self.f, 0, 0, 0],
+                               [0, self.f, 0, 0],
+                               [0, 0, self.g, 1],
+                               [0, 0, -self.zn*self.g, 0]])
 
 
     def rotx(self, point):
@@ -60,10 +62,10 @@ class App:
         self.screen.fill((255, 255, 255))
 
         for i in range(len(self.points)):
-            #self.points[i] = self.rotx(self.points[i])
-            #self.points[i] = self.roty(self.points[i])
-            self.project(self.points[i])
-            #self.project_ortho(self.points[i])
+            self.points[i] = self.roty(self.points[i])
+            rotated = mm.copy_matrix(self.points[i])
+            rotated += mm.Matrix([[0, 0, 4, 1]])
+            self.project(rotated)
             
     
     def project_ortho(self, point):
@@ -78,11 +80,9 @@ class App:
             projected[0][1] /= projected[0][3]
             projected[0][2] /= projected[0][3]
             projected[0][3] /= projected[0][3]
-
-            x, y = projected[0][0], projected[0][1]
-            pg.draw.circle(self.screen, (0), (x + self.hwidth, y + self.hheight), 1)
-
-            return (projected[0][0], projected[0][1], projected[0][2], projected[0][3])
+            
+            x, y = (projected[0][0] + 1) * self.hwidth, (projected[0][1] + 1) * self.hheight
+            pg.draw.circle(self.screen, (0), (x, y), 5)
 
 
     def run(self):
