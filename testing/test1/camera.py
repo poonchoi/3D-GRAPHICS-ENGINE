@@ -12,7 +12,7 @@ class Camera:
         self.v_fov = self.h_fov * (render.HEIGHT / render.WIDTH)
         self.near_plane = 0.1
         self.far_plane = 100
-        self.moving_speed = 1
+        self.moving_speed = .5
         self.rotation_speed = 0.01
 
     def control(self):
@@ -29,6 +29,8 @@ class Camera:
             self.position += (self.up * self.moving_speed)
         if key[pg.K_e]:
             self.position -= (self.up * self.moving_speed)
+
+        
 
         if key[pg.K_LEFT]:
             self.camera_yaw(-self.rotation_speed)
