@@ -46,13 +46,9 @@ class Point():
             x /= w
             y /= w
             z /= w
-            if (x < 2 and x > -2) and (y < 2 and y > -2) and not(w < 0):
+            if (x < 2 and x > -2) and (y < 2 and y > -2):
                 x, y = (x + 1) * self.app.hwidth, (y + 1) * self.app.hheight
-
-        if not projected[0][3] <= 0:
-            x = (projected[0][0] / projected[0][3]) + self.app.hwidth
-            y = (projected[0][1] / projected[0][3]) + self.app.hheight
-            pg.draw.circle(self.app.screen, (255,255,255), (x, y), (2))
-
-        else:
-            return False
+                #pg.draw.circle(self.app.screen, self.app.line_color, (x, y), self.app.vertex_size)
+                return (x, y, z)
+            else:
+                return None
