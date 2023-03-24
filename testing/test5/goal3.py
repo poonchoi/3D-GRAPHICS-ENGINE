@@ -3,6 +3,7 @@ import math as m
 from MatrixMath import matrix as mm
 from matrices import *
 import time as t
+from pygame.colordict import THECOLORS
 
 class Camera:
     def __init__(self, app, position):
@@ -74,12 +75,10 @@ class Camera:
             self.pitch(self.angle)
 
         
-        x, y = pg.mouse.get_pos()
+        # x, y = pg.mouse.get_pos()
         # self.yaw((x - self.app.hwidth)/1000)
         # self.pitch((y - self.app.hheight)/1000)
-        #print((x - self.app.hwidth)/1000, (y - self.app.hheight)*-1/1000)
-        print(x, y)
-        #pg.mouse.set_pos((self.app.hwidth, self.app.hheight))
+        # pg.mouse.set_pos((self.app.hwidth, self.app.hheight))
         
 
 
@@ -137,7 +136,7 @@ class App:
     
 
     def draw(self):
-        self.screen.fill((0))
+        self.screen.fill(THECOLORS["cornsilk4"])
 
         for i in range(len(self.points)):
             copy = mm.copy_matrix(self.points[i])
@@ -168,7 +167,6 @@ class App:
 
     def run(self):
         while True:
-            pg.mouse.set_pos((self.hwidth, self.hheight))
             self.draw()
             self.cam.movement()
 
