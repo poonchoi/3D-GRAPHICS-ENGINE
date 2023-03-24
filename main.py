@@ -87,13 +87,13 @@ cubes = [
     [-100,  100, 3.0, 1.0]]  # Top left
 ]
 
-# for cube in cubes:
-#     for tri in indices:
-#         pg3d.Triangle(new_app, cube[tri[0]], cube[tri[1]], cube[tri[2]])
-
 for cube in cubes:
-    for point in cube:
-        pg3d.Point(new_app, point)
+    for tri in indices:
+        pg3d.Triangle(new_app, cube[tri[0]], cube[tri[1]], cube[tri[2]])
+
+# for cube in cubes:
+#     for point in cube:
+#         pg3d.Point(new_app, point)
 
 if __name__ == "__main__":
     new_app.run()
