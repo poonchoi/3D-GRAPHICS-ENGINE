@@ -48,7 +48,6 @@ class App:
     def add_triangle(self, triangle):
         self.mesh.append(triangle)
 
-
     def draw(self):
         self.screen.fill(self.bg_color)
         for shape in self.mesh:
