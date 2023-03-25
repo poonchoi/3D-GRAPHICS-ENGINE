@@ -48,7 +48,6 @@ class Point():
             z /= w
             if (x < 2 and x > -2) and (y < 2 and y > -2):
                 x, y = (x + 1) * self.app.hwidth, (y + 1) * self.app.hheight
-                #pg.draw.circle(self.app.screen, self.app.line_color, (x, y), self.app.vertex_size)
                 return (x, y, z)
             else:
                 return None

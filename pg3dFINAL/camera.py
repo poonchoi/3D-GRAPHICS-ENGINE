@@ -67,6 +67,12 @@ class Camera:
         if key[pg.K_s]:
             self.forward = self.speed * self.forward
             self.pos = self.pos - self.forward
+        if key[pg.K_q]:
+            self.up = self.speed * self.up
+            self.pos = self.pos + self.up
+        if key[pg.K_e]:
+            self.up = self.speed * self.up
+            self.pos = self.pos - self.up
 
         if key[pg.K_LEFT]:
             self.yaw(-self.angle)

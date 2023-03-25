@@ -20,9 +20,7 @@ class Triangle:
     def draw_triangle(self):
         if len(self.projected_points) == 3:
             a, b, c = self.projected_points
-  
-            pg.draw.polygon(self.app.screen, self.app.line_color, (a[:-1], b[:-1], c[:-1]))
-
+            pg.draw.polygon(self.app.screen, self.app.line_color, (a[:-1], b[:-1], c[:-1]), 1)
 
 
     def connect_points(self):

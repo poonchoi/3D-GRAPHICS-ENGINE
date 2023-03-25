@@ -4,6 +4,15 @@ app = pg3d.App(bg_color=(40), line_color=(110, 110, 4))
 
 points = [[1, 1, 1], [-1, -1, 1], [-1, 1, 1], [1, -1, 1], 
           [1, 1, -1], [-1, -1, -1], [-1, 1, -1], [1, -1, -1]]
+cubes = [[-1, -1,  1],  # Bottom left
+    [ 1, -1,  1],  # Bottom right
+    [ 1,  1,  1],  # Top right
+    [-1,  1,  1],  # Top left
+    # Back face
+    [-1, -1, -1],  # Bottom left
+    [ 1, -1, -1],  # Bottom right
+    [ 1,  1, -1],  # Top right
+    [-1,  1, -1]],  # Top left
 
 indices = [
     # Front face
@@ -26,12 +35,14 @@ indices = [
     [1, 0, 4] # Second triangle
 ]
 
-classpoints = [pg3d.Point(app, i) for i in points]
+# classpoints = [pg3d.Point(app, i) for i in points]
 
-for point in points:
-    for tri in indices:
-        print(points[tri[0]], points[tri[1]], points[tri[2]])
-        pg3d.Triangle(app, point[tri[0]], point[tri[1]], point[tri[2]])
 
+# for tri in indices:
+#     pg3d.Triangle(app, cubes[0][tri[0]], cubes[0][tri[1]], cubes[0][tri[2]])
+
+pg3d.Shape(app, "cube", 2, [0,0,6])
+pg3d.Shape(app, "pyramid", 4, [-5,2,6])
+pg3d.Shape(app, "tetrahedron", 4, [5,2,6])
 
 app.run()
