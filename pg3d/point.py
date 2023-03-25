@@ -1,14 +1,15 @@
+import pygame as pg
 import pg3d.MatrixMath.matrix as mm
 import math as m
+from pygame.colordict import THECOLORS
 
 
 class Point():
-    def __init__(self, app, coordinate, vertex=False):
-        self.coordinate = mm.Matrix([coordinate])
+    def __init__(self, app, coordinate=[0, 0, 0], vertex=True):
+        self.coordinate = mm.Matrix([[*coordinate, 1]])
         self.app = app
-        self.world = app.world
-        if not vertex:
-            self.world.add_point(self)
+        self.app.add_point(self)
+        self.vertex = vertex
 
 
     def __repr__(self):
@@ -36,23 +37,18 @@ class Point():
             return "invalid position"
 
     
-    def project(self, P, V):
-        """
-        Projects the point so that it can be drawn on a 2D screen
-        if the point is infront of the camera, the method returns the x, y coordinates of the point
-        if the point is behind the camrea it returs False
-        """
-        point = mm.copy_matrix(self.coordinate.matrix)
-       # print(point)
-        rotated = point * V
-       # print(V)
-        projected = rotated * P
-       # print(projected)
-
-        if not projected[0][3] <= 0:
-            x = (projected[0][0] / projected[0][3]) + self.app.H_WIDTH
-            y = (projected[0][1] / projected[0][3]) + self.app.H_HEIGHT
-            return x, y
-
-        else:
-            return False
+    def project(self, proj, cam):
+        copy = mm.copy_matrix(self.coordinate)
+        copy *= cam
+        projected = copy * proj
+        x, y, z, w = projected[0]
+        
+        if w != 0:
+            x /= w
+            y /= w
+            z /= w
+            if (x < 2 and x > -2) and (y < 2 and y > -2):
+                x, y = (x + 1) * self.app.hwidth, (y + 1) * self.app.hheight
+                return (x, y, z)
+            else:
+                return None

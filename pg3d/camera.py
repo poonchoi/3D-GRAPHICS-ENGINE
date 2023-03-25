@@ -1,103 +1,91 @@
-import pygame as pg
-import math as m
 import pg3d.MatrixMath.matrix as mm
 from pg3d.matrices import *
+import pygame as pg
 
 
-class Camera():
-    def __init__(self, position):
-        self.position = mm.Matrix([position])
-        self.orientation = [0, 0]
+class Camera:
+    def __init__(self, app, position):
+        self.app = app
 
-        # direction that the camera is looking at
-        self.forward = mm.Matrix([[1, 0, 1, 1]])
+        self.pos = mm.Matrix([[*position, 1]])
+        self.forward = mm.Matrix([[0, 0, 1, 1]])
         self.up = mm.Matrix([[0, 1, 0, 1]])
         self.right = mm.Matrix([[1, 0, 0, 1]])
 
-        self.movement_speed = 1
-        self.rotation_speed = 0.001
-        self.pitch_a = 0
-        self.yaw_a = 0
+        self.speed = 1
+        self.angle = m.radians(1)
 
 
-    def check_movement(self):
-        """
-        Checks for keyboard input and updates the position of the camera based on the key pressed
-        """
-        key = pg.key.get_pressed()
-
-        if key[pg.K_w]:
-            self.position += (self.movement_speed * self.forward)
-        if key[pg.K_s]:
-            self.position -= (self.movement_speed * self.forward)
-        if key[pg.K_a]:
-            self.position -= (self.movement_speed * self.right)
-        if key[pg.K_d]:
-            self.position += (self.movement_speed * self.right)
-        
-        if key[pg.K_RIGHT]:
-            self.yaw_a += self.rotation_speed
-            self.yaw(self.yaw_a)
-        if key[pg.K_LEFT]:
-            self.yaw_a -= self.rotation_speed
-            self.yaw(self.yaw_a)
-        if key[pg.K_UP]:
-            self.pitch_a += self.rotation_speed
-            self.pitch(self.pitch_a)
-        if key[pg.K_DOWN]:
-            self.pitch_a += self.rotation_speed
-            self.pitch(self.pitch_a)
+    def yaw(self, angle):
+        self.up *= rotate_y(angle)
+        self.forward *= rotate_y(angle)
+        self.right *= rotate_y(angle)
 
 
     def pitch(self, angle):
-        """
-        Rotates the camera along the x-axis
-        The axes get multipied by the rotation matrix
-        """
-        rot = rotate_x(angle)
-        self.up = self.up * rot
-        self.right = self.right * rot
-        self.forward = self.forward * rot
-    
-
-    def yaw(self, angle):
-        """
-        Rotates the camera along the y-axis
-        The axes get multipied by the rotation matrix
-        """
-        rot = rotate_y(angle)
-        self.up = self.up * rot
-        self.right = self.right * rot
-        self.forward = self.forward * rot
+        self.up *= rotate_x(angle)
+        self.forward *= rotate_x(angle)
+        self.right *= rotate_x(angle)
 
 
-    def translate_matrix(self):
-        """
-        Returns a matrix which translates the point so that the camera is placed at the centre of the screen
-        """
-        x, y, z, w = self.position[0]
-        return mm.Matrix([[1, 0, 0, 0],
-                          [0, 1, 0, 0],
-                          [0, 0, 1, 0],
-                          [-x, -y, -z, 1]])
+    def rot_mat(self):
+        fx, fy, fz, fw = self.forward[0]
+        rx, ry, rz, rw = self.right[0]
+        ux, uy, uz, uw = self.up[0]
 
-
-    def rotate_matrix(self):
-        """
-        Returns a matrix that rotates the points around the camrea 
-        """
-        rx, ry, rz, w = self.right[0]
-        fx, fy, fz, w = self.forward[0]
-        ux, uy, uz, w = self.up[0]
         return mm.Matrix([[rx, ux, fx, 0],
                           [ry, uy, fy, 0],
                           [rz, uz, fz, 0],
-                          [0, 0, 0, 1]])
+                          [ 0,  0,  0, 1]])
+    
+
+    def trans_mat(self):
+        x, y, z, w = self.pos[0]
+
+        return mm.Matrix([[1, 0, 0, 0],
+                          [0, 1, 0, 0],
+                          [0, 0, 1, 0],
+                          [-x,-y,-z,1]])
+    
+
+    def cam_mat(self):
+        return self.trans_mat() * self.rot_mat()
 
 
-    def view_matrix(self):
-        """
-        Returns the dot product of the translate and rotate matrices
-        """
+    def movement(self):
+        key = pg.key.get_pressed()
+
+        if key[pg.K_a]:
+            self.right = self.speed * self.right
+            self.pos = self.pos - self.right
+        if key[pg.K_d]:
+            self.right = self.speed * self.right
+            self.pos = self.pos + self.right
+        if key[pg.K_w]:
+            self.forward = self.speed * self.forward
+            self.pos = self.pos + self.forward
+        if key[pg.K_s]:
+            self.forward = self.speed * self.forward
+            self.pos = self.pos - self.forward
+        if key[pg.K_q]:
+            self.up = self.speed * self.up
+            self.pos = self.pos + self.up
+        if key[pg.K_e]:
+            self.up = self.speed * self.up
+            self.pos = self.pos - self.up
+
+        if key[pg.K_LEFT]:
+            self.yaw(-self.angle)
+        if key[pg.K_RIGHT]:
+            self.yaw(self.angle)
+        if key[pg.K_UP]:
+            self.pitch(-self.angle)
+        if key[pg.K_DOWN]:
+            self.pitch(self.angle)
+
         
-        return self.translate_matrix() * self.rotate_matrix()
+        # x, y = pg.mouse.get_pos()
+        # self.yaw((x - self.app.hwidth)/1000)
+        # self.pitch((y - self.app.hheight)/1000)
+        # pg.mouse.set_pos((self.app.hwidth, self.app.hheight))
+        

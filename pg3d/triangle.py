@@ -1,38 +1,33 @@
 from pg3d.point import Point
 import pygame as pg
 
-
 class Triangle:
-    def __init__(self, app, a, b, c):
-        self.points = [Point(app, a, True), Point(app, b, True), Point(app, c, True)]
-        self.projected_points = [None for i in range(3)]
+    def __init__(self, app, vertices):
+        self.points = [Point(app, vertices[0], False), Point(app, vertices[1], False), Point(app, vertices[2], False)]
+        self.projected_points = []
         self.app = app
-        self.world = app.world
-        self.world.add_triangle(self)
+        self.app.add_triangle(self)
+    
+    
+    def project(self):
+        self.projected_points = []
+        for point in self.points:
+            projected = point.project(self.app.projection_mat, self.app.camera.cam_mat())
+            if projected != None:
+                self.projected_points.append(projected)
+        
+        self.draw_triangle()
+    
+
+    def draw_triangle(self):
+        if len(self.projected_points) == 3:
+            a, b, c = self.projected_points
+            pg.draw.polygon(self.app.screen, self.app.line_color, (a[:-1], b[:-1], c[:-1]), 1)
 
 
     def connect_points(self):
-        """
-        Connect the points of the triangle with lines
-        """
         pg.draw.polygon(self.app.screen, 0, self.projected_points, 1)
 
 
-    def check_projected(self):
-        """
-        Checks if all the points have been projected to decide if the triangle should be drawn
-        Returns True if the triangle can be draw
-        Returns False if the triangle can't be drawn
-        """
-        check = True
-        for i in range(3):
-            if self.projected_points[i] == False:
-                check = False
-        return check
-    
-    
     def __getitem__(self, index):
-        """
-        Defines the behaviour of indexing Triangle objects
-        """
         return self.points[index]

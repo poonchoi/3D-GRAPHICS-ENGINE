@@ -16,7 +16,11 @@ def identity(n):
     return matrix
 
 def copy_matrix(matrix):
-    return Matrix([[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))])
+    if type(matrix) == list:
+        return Matrix([[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))])
+    else:
+        m = matrix.matrix
+        return Matrix([[m[h][w] for w in range(len(m[0]))] for h in range(len(m))])
 
 def dot(a, b):
     result = zeroes(a.height, b.width)
@@ -199,31 +203,31 @@ class Matrix():
 
             # if both conditions are not met, the inverse will be calculated
             else:
-                I = identity(self.height)
-                # copies of matrix and identity matrix are made
-                M_copy = copy_matrix(self.matrix)
-                I_copy = copy_matrix(I.matrix)
+                i = identity(self.height)
+                # copies of matrix and identity matrix
+                m_copy = copy_matrix(self.matrix)
+                i_copy = copy_matrix(i.matrix)
                 
                 indices = list(range(self.height)) # list of all the indices in the matrix row
 
                 for cd in range(self.height): # cd = current diagonal
-                    cd_factor = 1 / M_copy[cd][cd]
+                    cd_factor = 1 / m_copy[cd][cd]
                     
                     # divide all the values in the current row by the diagonal item
                     # this is done to make the diagonal item equal to one
                     for i in range(self.height):
-                        M_copy[cd][i] *= cd_factor
-                        I_copy[cd][i] *= cd_factor
+                        m_copy[cd][i] *= cd_factor
+                        i_copy[cd][i] *= cd_factor
                 
                     for j in indices[:cd] + indices[cd+1:]:
-                        cr_factor = M_copy[j][cd] # cr = current row
+                        cr_factor = m_copy[j][cd] # cr = current row
 
                         # subtract the current value by the pivot on its row multiplied by the value on the row above
                         for k in range(self.height):
-                            M_copy[j][k] -= (M_copy[cd][k] * cr_factor)
-                            I_copy[j][k] -= (I_copy[cd][k] * cr_factor)
+                            m_copy[j][k] -= (m_copy[cd][k] * cr_factor)
+                            i_copy[j][k] -= (i_copy[cd][k] * cr_factor)
 
-                return I_copy
+                return i_copy
 
     def is_square(self):
         """
