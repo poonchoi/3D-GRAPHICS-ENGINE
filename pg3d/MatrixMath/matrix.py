@@ -5,6 +5,7 @@ def zeroes(height, width):
     """
     return Matrix([[0 for w in range(width)] for h in range(height)])
 
+
 def identity(n):
     """
     Returns an identity matrix of size n x n
@@ -15,12 +16,16 @@ def identity(n):
 
     return matrix
 
+
 def copy_matrix(matrix):
     if type(matrix) == list:
-        return Matrix([[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))])
+        return Matrix(
+            [[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))]
+        )
     else:
         m = matrix.matrix
         return Matrix([[m[h][w] for w in range(len(m[0]))] for h in range(len(m))])
+
 
 def dot(a, b):
     result = zeroes(a.height, b.width)
@@ -28,15 +33,16 @@ def dot(a, b):
     for height in range(a.height):
         for width in range(b.width):
             sum = 0
-            
+
             for b_height in range(a.width):
                 sum += a.matrix[height][b_height] * b[b_height][width]
 
             result[height][width] = sum
-    
+
     return result
 
-class Matrix():
+
+class Matrix:
     def __init__(self, matrix):
         """
         initialises the matrix and finds the height and width of the matrix
@@ -49,34 +55,34 @@ class Matrix():
         """
         Defines behaviour of printing a matrix object
         """
-        print("[",end="")
+        print("[", end="")
         # loop that iterates through every item of the matrix
         for height in range(self.height):
-
-            print("[",end="")
+            print("[", end="")
             for width in range(self.width):
-                if width != self.width-1: # if the number is'nt the last in its row
-                    print(f"{self.matrix[height][width]}, ",end="")
+                if width != self.width - 1:  # if the number is'nt the last in its row
+                    print(f"{self.matrix[height][width]}, ", end="")
 
                 else:
-                    print(f"{self.matrix[height][width]}",end="") # if the number is that last in its row
+                    print(
+                        f"{self.matrix[height][width]}", end=""
+                    )  # if the number is that last in its row
 
-            if height != self.height-1:
+            if height != self.height - 1:
                 print("]")
 
             else:
-                print("]",end="")
+                print("]", end="")
 
-        print("]",end="")
+        print("]", end="")
 
-        return ("")
+        return ""
 
     def __setitem__(self, index, value):
         """
-        Defines the behaviour of changing the value of the matrix at a specific value
+        Defines the behaviour of changing the value of the matrix at a specific index
         """
         self.matrix[index] = value
-
 
     def __getitem__(self, index):
         """
@@ -87,20 +93,22 @@ class Matrix():
         > a[0]
           [1,2,3]
         """
-        return self.matrix[index] 
+        return self.matrix[index]
 
     def __rmul__(self, value):
         """
         Defines behaviour of multiplying matrix object with non-matrix object which is to the right of the matrix
         """
-        if isinstance(value, int) or isinstance(value, float): # checks if the value is a number
+        if isinstance(value, int) or isinstance(
+            value, float
+        ):  # checks if the value is a number
             result = zeroes(self.height, self.width)
 
             # iterates through each number and multiplies it with the value
             for height in range(self.height):
                 for width in range(self.width):
                     result[height][width] = self.matrix[height][width] * value
-            
+
             return result
 
         else:
@@ -127,7 +135,9 @@ class Matrix():
                 result = zeroes(self.height, self.width)
                 for height in range(self.height):
                     for width in range(self.width):
-                        result[height][width] = self[height][width] + other[height][width]
+                        result[height][width] = (
+                            self[height][width] + other[height][width]
+                        )
                 return result
             else:
                 return "CANNOT ADD MATRICES WITH DIFFERENT SHAPE"
@@ -143,7 +153,9 @@ class Matrix():
                 result = zeroes(self.height, self.width)
                 for height in range(self.height):
                     for width in range(self.width):
-                        result[height][width] = self[height][width] - other[height][width]
+                        result[height][width] = (
+                            self[height][width] - other[height][width]
+                        )
                 return result
             else:
                 return "CANNOT SUBTRACT MATRICES WITH DIFFERENT SHAPE"
@@ -156,7 +168,7 @@ class Matrix():
         """
         # 1. uses the zip function to transpose the unpacked matrix
         # 2. uses the map function to turn the sets into lists
-        return Matrix(list(map(list,zip(*self.matrix))))
+        return Matrix(list(map(list, zip(*self.matrix))))
 
     def minor(self, i, j):
         """
@@ -164,14 +176,19 @@ class Matrix():
         """
         if self.is_square():
             # removes the i-th row and j-th column using slicing
-            return Matrix([row[:j] + row[j+1:] for row in (self.matrix[:i]+self.matrix[i+1:])])
-        
+            return Matrix(
+                [
+                    row[:j] + row[j + 1 :]
+                    for row in (self.matrix[:i] + self.matrix[i + 1 :])
+                ]
+            )
+
         else:
             print("CANNOT FIND MINOR OF NON-SQUARE MATRIX")
-    
+
     def determinant(self):
         """
-        Returns the determinant of a function using the method of cofactors
+        Returns the determinant of a matrix using the method of cofactors
         """
         if self.is_square():
             # returns the determinant of a 1x1 matrix
@@ -180,14 +197,18 @@ class Matrix():
 
             determinant = 0
 
-            for i, value in enumerate(self.matrix[0]): # iterate over elements in first row of matrix
-                minor = self.minor(0, i) # calculate minor at position [0, i]
-                determinant += (-1)**i * value * minor.determinant() # cofactor formula
-            
+            for i, value in enumerate(
+                self.matrix[0]
+            ):  # iterate over elements in first row of matrix
+                minor = self.minor(0, i)  # calculate minor at position [0, i]
+                determinant += (
+                    (-1) ** i * value * minor.determinant()
+                )  # cofactor formula
+
             return determinant
         else:
             print("CANNOT FIND DETERMINANT OF A NON-SQUARE MATRIX")
-    
+
     def inverse(self):
         """
         Returns the inverse of the matrix using Gauss-Jordan Elimination method
@@ -207,25 +228,27 @@ class Matrix():
                 # copies of matrix and identity matrix
                 m_copy = copy_matrix(self.matrix)
                 i_copy = copy_matrix(i.matrix)
-                
-                indices = list(range(self.height)) # list of all the indices in the matrix row
 
-                for cd in range(self.height): # cd = current diagonal
+                indices = list(
+                    range(self.height)
+                )  # list of all the indices in the matrix row
+
+                for cd in range(self.height):  # cd = current diagonal
                     cd_factor = 1 / m_copy[cd][cd]
-                    
+
                     # divide all the values in the current row by the diagonal item
                     # this is done to make the diagonal item equal to one
                     for i in range(self.height):
                         m_copy[cd][i] *= cd_factor
                         i_copy[cd][i] *= cd_factor
-                
-                    for j in indices[:cd] + indices[cd+1:]:
-                        cr_factor = m_copy[j][cd] # cr = current row
+
+                    for j in indices[:cd] + indices[cd + 1 :]:
+                        cr_factor = m_copy[j][cd]  # cr = current row
 
                         # subtract the current value by the pivot on its row multiplied by the value on the row above
                         for k in range(self.height):
-                            m_copy[j][k] -= (m_copy[cd][k] * cr_factor)
-                            i_copy[j][k] -= (i_copy[cd][k] * cr_factor)
+                            m_copy[j][k] -= m_copy[cd][k] * cr_factor
+                            i_copy[j][k] -= i_copy[cd][k] * cr_factor
 
                 return i_copy
 
@@ -239,6 +262,6 @@ class Matrix():
         """
         if self.width == self.height:
             return True
-            
+
         else:
             return False
