@@ -1,14 +1,14 @@
 import pygame
 import numpy as np
-from colors import *
-from matrices import *
-from cube import Cube
+from libraryTesting.colors import *
+from libraryTesting.matrices import *
+from libraryTesting.cube import Cube
 
 
-class App():
+class App:
     def __init__(self, resolution=(800, 600), fps=60):
         pygame.init()
-        self.RES = self.WIDTH, self.HEIGHT = (resolution)
+        self.RES = self.WIDTH, self.HEIGHT = resolution
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.FPS = fps
         self.screen = pygame.display.set_mode(self.RES)
@@ -17,14 +17,16 @@ class App():
         self.angle = 0
         self.scale = 200
 
-
     def connect_points(self, i, j, points):
-        pygame.draw.line(self.screen, BLACK, (points[i][0], points[i][1]), (points[j][0], points[j][1]))
-
+        pygame.draw.line(
+            self.screen,
+            BLACK,
+            (points[i][0], points[i][1]),
+            (points[j][0], points[j][1]),
+        )
 
     def draw(self):
         pass
-
 
     def run(self):
         while True:
@@ -36,6 +38,6 @@ class App():
             self.clock.tick(self.FPS)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = App()
     app.run()
