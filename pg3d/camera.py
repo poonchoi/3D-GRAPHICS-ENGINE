@@ -1,5 +1,5 @@
 import pg3d.MatrixMath.matrix as mm
-from pg3d.matrices import *
+from pg3d.matrices import rotate_x, rotate_y, rotate_z
 import pygame as pg
 
 

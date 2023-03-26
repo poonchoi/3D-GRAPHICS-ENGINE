@@ -36,7 +36,7 @@ app.run()
 ## API Reference
 ---
 ```py
-App(kwargs)
+App(kwargs):
 
 
 kwargs:
