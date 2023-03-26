@@ -19,6 +19,19 @@ class App:
         fullscreen=False,
         mouse_look=False,
     ):
+        """
+        Initialises the library, creates the projection matrix and creates a camera
+
+        Args:
+            dimensions ([tuple], optional): [window dimensions]. Defaults to (1000, 700).
+            cam_pos ([list], optional): [position of camrea]. Defaults to [0, 0, 0].
+            BG_COLOR ([tuple], optional): [background color]. Defaults to (0, 0, 0).
+            LINE_COLOR ([tuple], optional): [color for drawing lines and points]. Defaults to (255, 255, 255).
+            VERTEX_SIZE ([int], optional): [size of points]. Defaults to 2.
+            stats ([bool], optional): [shows some stats on screen]. Defaults to False.
+            fullscreen ([bool], optional): [makes screen fullscreen]. Defaults to False.
+            mouse_look ([bool], optional): [use mouse movement too look with camera]. Defaults to False.
+        """
         pg.init()
 
         if fullscreen:
@@ -62,7 +75,10 @@ class App:
             [[m00, 0, 0, 0], [0, m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
         )
 
-    def _create_projection_matrix(self):
+    def _update_projection_matrix(self):
+        """
+        Updates the projection matrix when the values of fov and aspect ratio are changed by the user
+        """
         m00 = (self.height / self.width) * (1 / m.tan(m.radians(self.fov / 2)))
         m11 = 1 / m.tan(m.radians(self.fov / 2))
         m22 = self.zf / (self.zf - self.zn)
@@ -73,6 +89,12 @@ class App:
         )
 
     def _add_point(self, point):
+        """
+        When a user creates a point object this function is called and adds the point to mesh
+
+        Args:
+            point ([Point]): [a point object]
+        """
         self.mesh.append([point])
 
     def _add_triangle(self, triangle):
@@ -100,6 +122,9 @@ class App:
                             )
 
     def _display_stats(self):
+        """
+        If self.stats is true, this method will display stats on screen every frame
+        """
         font = pg.font.Font("freesansbold.ttf", 10)
         fov = font.render(f"fov = {self.fov}", True, (0, 255, 0))
         fps = font.render(f"fps = {round(self.clock.get_fps())}", True, (0, 255, 0))
@@ -121,18 +146,21 @@ class App:
                     self.fov -= 1
                 else:
                     self.fov += 1
-                self._create_projection_matrix()
+                self._update_projection_matrix()
 
             elif event.type == pg.VIDEORESIZE:
                 self.screen = pg.display.set_mode((event.w, event.h), pg.RESIZABLE)
                 self.dimensions = self.width, self.height = (event.w, event.h)
                 self.half_width, self.half_height = self.width / 2, self.height / 2
-                self._create_projection_matrix()
+                self._update_projection_matrix()
 
             elif (event.type == pg.MOUSEMOTION) and (self.mouse_look == True):
                 self.camera._mouse_look(event.rel)
 
     def run(self):
+        """
+        Main loop of the library which checks for camera control and other events, and draws and projects the points
+        """
         while True:
             self._draw()
             self.camera._movement()

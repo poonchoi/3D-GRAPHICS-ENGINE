@@ -2,12 +2,20 @@ from pg3d.triangle import Triangle
 
 
 class Shape:
-    def __init__(self, app, shape, size=1, center=[0, 0, 0], width=1):
+    def __init__(self, app, shape, size=1, center=[0, 0, 0]):
+        """
+        Initialises shape
+
+        Args:
+            app ([App]): [Specify app object]
+            shape ([str]): [Specify shape]
+            size (int, optional): [Size of shape]. Defaults to 1.
+            center (list, optional): [Center coordinate of shape]. Defaults to [0, 0, 0].
+        """
         self.app = app
 
         self.center = center
         self.size = size
-        self.width = width
 
         triangles, vertices = None, None
 
@@ -30,6 +38,12 @@ class Shape:
                 )
 
     def _cube(self):
+        """
+        Creates points and vertices of cube
+
+        Returns:
+            [tuple[list, list]]: [tuple containing list of vertices and list of triangles]
+        """
         x, y, z = self.center
         half_size = self.size / 2
 
@@ -62,6 +76,12 @@ class Shape:
         return vertices, triangles
 
     def _pyramid(self):
+        """
+        Creates points and vertices of pyramid
+
+        Returns:
+            [tuple[list, list]]: [tuple containing list of vertices and list of triangles]
+        """
         x, y, z = self.center
         half_size = self.size / 2
         height = self.size
@@ -87,6 +107,12 @@ class Shape:
         return vertices, triangles
 
     def _tetrahedron(self):
+        """
+        Creates points and vertices of tetrahedron
+
+        Returns:
+            [tuple[list, list]]: [tuple containing list of vertices and list of triangles]
+        """
         half_size = self.size / 2
         x, y, z = self.center
         height = (

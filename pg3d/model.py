@@ -4,11 +4,19 @@ from pg3d.point import Point
 
 class Model:
     def __init__(self, app, path):
+        """
+        Args:
+            app ([App]): [instance of App class]
+            path ([str]): [path of .obj file]
+        """
         self.app = app
         self.path = path
         self._draw_model()
 
     def _draw_model(self):
+        """
+        Gets vertex and triangle information from .obj file and creates the necessary triangles and points
+        """
         vertices, triangles = [], []
         with open(self.path) as file:
             for line in file:

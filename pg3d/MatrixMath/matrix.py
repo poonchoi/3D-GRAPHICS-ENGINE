@@ -1,7 +1,13 @@
 def zeroes(height, width):
     """
     Creates a matrix of size h x w and fills it with zeroes
-    this uses nested list comprehension
+
+    Args:
+        height ([int]): [rows of matrix]
+        width ([int]): [columns of matrix]
+
+    Returns:
+        [Matrix]: [Matrix filled with zeroes]
     """
     return Matrix([[0 for w in range(width)] for h in range(height)])
 
@@ -9,6 +15,9 @@ def zeroes(height, width):
 def identity(n):
     """
     Returns an identity matrix of size n x n
+
+    Args:
+        n ([int]): [size of square matrix]
     """
     matrix = zeroes(n, n)
     for i in range(matrix.height):
@@ -18,6 +27,15 @@ def identity(n):
 
 
 def copy_matrix(matrix):
+    """
+    Returns a copy of the inputted matrix
+
+    Args:
+        matrix ([Matrix]): [matrix that needs to be copied]
+
+    Returns:
+        [Matrix]: [copied matrix]
+    """
     if type(matrix) == list:
         return Matrix(
             [[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))]
@@ -28,6 +46,16 @@ def copy_matrix(matrix):
 
 
 def dot(a, b):
+    """
+    Finds dot product of matrices a and b that are compatible
+
+    Args:
+        a ([Matrix]): [Matrix used for dot product]
+        b ([Matrix]): [Matrix used for dot product]
+
+    Returns:
+        [Matrix]: [result]
+    """
     result = zeroes(a.height, b.width)
 
     for height in range(a.height):
@@ -46,6 +74,9 @@ class Matrix:
     def __init__(self, matrix):
         """
         initialises the matrix and finds the height and width of the matrix
+
+        Args:
+            matrix ([list]): [2D array]
         """
         self.matrix = matrix
         self.width = len(self.matrix[0])
@@ -54,6 +85,9 @@ class Matrix:
     def __repr__(self):
         """
         Defines behaviour of printing a matrix object
+
+        Returns:
+            [str]: [String representation of matrix obejct]
         """
         print("[", end="")
         # loop that iterates through every item of the matrix
@@ -81,6 +115,10 @@ class Matrix:
     def __setitem__(self, index, value):
         """
         Defines the behaviour of changing the value of the matrix at a specific index
+
+        Args:
+            index ([int]): [position of matrix]
+            value ([float]): [new value at position of matrix]
         """
         self.matrix[index] = value
 
@@ -92,12 +130,24 @@ class Matrix:
         > a = Matrix([1,2,3],[4,5,6])
         > a[0]
           [1,2,3]
+
+        Args:
+            index ([int]): [position of matrix]
+
+        Returns:
+            [any]: [returns list or float]
         """
         return self.matrix[index]
 
     def __rmul__(self, value):
         """
         Defines behaviour of multiplying matrix object with non-matrix object which is to the right of the matrix
+
+        Args:
+            value ([float]): [number that is multiplied to matrix]
+
+        Returns:
+            [Matrix]: [Result of multiplication]
         """
         if isinstance(value, int) or isinstance(
             value, float
@@ -117,6 +167,12 @@ class Matrix:
     def __mul__(self, other):
         """
         Defines the behaviour of the * operator for multiplication
+
+        Args:
+            other ([Matrix]): [other matrix that is multiplied with]
+
+        Result:
+            [Matrix]: [Result of matrix multiplication]
         """
         try:
             if self.width == other.height:
@@ -129,6 +185,12 @@ class Matrix:
     def __add__(self, other):
         """
         Defines the behaviour of the + operator for addition
+
+        Args:
+            other ([Matrix]): [other matrix that is added to]
+
+        Result:
+            [Matrix]: [Result of matrix addition]
         """
         try:
             if (self.height == other.height) and (self.width == other.width):
@@ -147,6 +209,12 @@ class Matrix:
     def __sub__(self, other):
         """
         Defines the behaviour of the - operator for subtraction
+
+        Args:
+            other ([Matrix]): [other matrix that is subtracted to]
+
+        Result:
+            [Matrix]: [Result of matrix subtraction]
         """
         try:
             if (self.height == other.height) and (self.width == other.width):
@@ -165,6 +233,9 @@ class Matrix:
     def transpose(self):
         """
         Returns a transposed copy of the matrix
+
+        Returns:
+            [Matrix]: [transposed matrix]
         """
         # 1. uses the zip function to transpose the unpacked matrix
         # 2. uses the map function to turn the sets into lists
@@ -173,6 +244,13 @@ class Matrix:
     def minor(self, i, j):
         """
         Returns a copy of the matrix with the row and column, i and j, deleted
+
+        Args:
+            i ([int]): [row to be deleted]
+            j ([int]): [column to be deleted]
+
+        Returns:
+            [Matrix]: [matrix without specified row and column]
         """
         if self.is_square():
             # removes the i-th row and j-th column using slicing
@@ -189,6 +267,9 @@ class Matrix:
     def determinant(self):
         """
         Returns the determinant of a matrix using the method of cofactors
+
+        Returns:
+            [float]: [returns determinant of matrix]
         """
         if self.is_square():
             # returns the determinant of a 1x1 matrix
@@ -212,6 +293,9 @@ class Matrix:
     def inverse(self):
         """
         Returns the inverse of the matrix using Gauss-Jordan Elimination method
+
+        Returns:
+            [Matrix]: [inverse of matrix]
         """
         # check if matrix isnt square
         if not self.is_square():
@@ -259,6 +343,9 @@ class Matrix:
         SQUARE MATRIX:  |   NON-SQUARE MATRIX:
         [[1,2],         |   [[1,2,3],
          [3,4]]         |    [4,5,6]]
+
+        Returns:
+            [bool]: [determines whether matrix is square]
         """
         if self.width == self.height:
             return True
