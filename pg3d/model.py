@@ -11,9 +11,9 @@ class Model:
         """
         self.app = app
         self.path = path
-        self._draw_model()
+        self._generate_model()
 
-    def _draw_model(self):
+    def _generate_model(self):
         """
         Gets vertex and triangle information from .obj file and creates the necessary triangles and points
         """

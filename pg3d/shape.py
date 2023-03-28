@@ -14,8 +14,8 @@ class Shape:
         """
         self.app = app
 
-        self.center = center
-        self.size = size
+        self._center = center
+        self._size = size
 
         triangles, vertices = None, None
 
@@ -44,8 +44,8 @@ class Shape:
         Returns:
             [tuple[list, list]]: [tuple containing list of vertices and list of triangles]
         """
-        x, y, z = self.center
-        half_size = self.size / 2
+        x, y, z = self._center
+        half_size = self._size / 2
 
         vertices = [
             [x - half_size, y - half_size, z + half_size],  # Front-bottom-left
@@ -82,9 +82,9 @@ class Shape:
         Returns:
             [tuple[list, list]]: [tuple containing list of vertices and list of triangles]
         """
-        x, y, z = self.center
-        half_size = self.size / 2
-        height = self.size
+        x, y, z = self._center
+        half_size = self._size / 2
+        height = self._size
 
         vertices = [
             [x - half_size, y + half_size, z - half_size],  # Bottom-back-left
@@ -113,8 +113,8 @@ class Shape:
         Returns:
             [tuple[list, list]]: [tuple containing list of vertices and list of triangles]
         """
-        half_size = self.size / 2
-        x, y, z = self.center
+        half_size = self._size / 2
+        x, y, z = self._center
         height = (
             self.size * 0.86
         )  # Multiply by 0.86 to adjust height to make it equilateral

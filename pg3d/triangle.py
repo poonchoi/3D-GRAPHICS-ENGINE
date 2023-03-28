@@ -16,18 +16,18 @@ class Triangle:
             Point(app, vertices[1], False),
             Point(app, vertices[2], False),
         ]
-        self.projected_points = []
+        self._projected_points = []
         self.app = app
         self.app.add_triangle(self)
 
-    def project(self):
+    def _project(self):
         """
         Projects triangle
         """
         self.projected_points = []
         for point in self.points:
-            projected = point.project(
-                self.app.projection_matrix, self.app.camera.cam_mat()
+            projected = point._project(
+                self.app.projection_matrix, self.app.camera._cam_mat()
             )
             if projected != None:
                 self.projected_points.append(projected)

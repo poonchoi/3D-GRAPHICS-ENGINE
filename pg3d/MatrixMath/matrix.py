@@ -41,7 +41,7 @@ def copy_matrix(matrix):
             [[matrix[h][w] for w in range(len(matrix[0]))] for h in range(len(matrix))]
         )
     else:
-        m = matrix.matrix
+        m = matrix._matrix
         return Matrix([[m[h][w] for w in range(len(m[0]))] for h in range(len(m))])
 
 
@@ -63,7 +63,7 @@ def dot(a, b):
             sum = 0
 
             for b_height in range(a.width):
-                sum += a.matrix[height][b_height] * b[b_height][width]
+                sum += a._matrix[height][b_height] * b[b_height][width]
 
             result[height][width] = sum
 
@@ -78,9 +78,9 @@ class Matrix:
         Args:
             matrix ([list]): [2D array]
         """
-        self.matrix = matrix
-        self.width = len(self.matrix[0])
-        self.height = len(self.matrix)
+        self._matrix = matrix
+        self.width = len(self._matrix[0])
+        self.height = len(self._matrix)
 
     def __repr__(self):
         """
@@ -95,11 +95,11 @@ class Matrix:
             print("[", end="")
             for width in range(self.width):
                 if width != self.width - 1:  # if the number is'nt the last in its row
-                    print(f"{self.matrix[height][width]}, ", end="")
+                    print(f"{self._matrix[height][width]}, ", end="")
 
                 else:
                     print(
-                        f"{self.matrix[height][width]}", end=""
+                        f"{self._matrix[height][width]}", end=""
                     )  # if the number is that last in its row
 
             if height != self.height - 1:
@@ -120,7 +120,7 @@ class Matrix:
             index ([int]): [position of matrix]
             value ([float]): [new value at position of matrix]
         """
-        self.matrix[index] = value
+        self._matrix[index] = value
 
     def __getitem__(self, index):
         """
@@ -137,7 +137,7 @@ class Matrix:
         Returns:
             [any]: [returns list or float]
         """
-        return self.matrix[index]
+        return self._matrix[index]
 
     def __rmul__(self, value):
         """
@@ -157,7 +157,7 @@ class Matrix:
             # iterates through each number and multiplies it with the value
             for height in range(self.height):
                 for width in range(self.width):
-                    result[height][width] = self.matrix[height][width] * value
+                    result[height][width] = self._matrix[height][width] * value
 
             return result
 
@@ -239,7 +239,7 @@ class Matrix:
         """
         # 1. uses the zip function to transpose the unpacked matrix
         # 2. uses the map function to turn the sets into lists
-        return Matrix(list(map(list, zip(*self.matrix))))
+        return Matrix(list(map(list, zip(*self._matrix))))
 
     def minor(self, i, j):
         """
@@ -257,7 +257,7 @@ class Matrix:
             return Matrix(
                 [
                     row[:j] + row[j + 1 :]
-                    for row in (self.matrix[:i] + self.matrix[i + 1 :])
+                    for row in (self._matrix[:i] + self._matrix[i + 1 :])
                 ]
             )
 
@@ -274,12 +274,12 @@ class Matrix:
         if self.is_square():
             # returns the determinant of a 1x1 matrix
             if self.height == 1:
-                return self.matrix[0][0]
+                return self._matrix[0][0]
 
             determinant = 0
 
             for i, value in enumerate(
-                self.matrix[0]
+                self._matrix[0]
             ):  # iterate over elements in first row of matrix
                 minor = self.minor(0, i)  # calculate minor at position [0, i]
                 determinant += (
@@ -310,8 +310,8 @@ class Matrix:
             else:
                 i = identity(self.height)
                 # copies of matrix and identity matrix
-                m_copy = copy_matrix(self.matrix)
-                i_copy = copy_matrix(i.matrix)
+                m_copy = copy_matrix(self._matrix)
+                i_copy = copy_matrix(i._matrix)
 
                 indices = list(
                     range(self.height)

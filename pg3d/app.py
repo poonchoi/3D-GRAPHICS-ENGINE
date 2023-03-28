@@ -5,6 +5,7 @@ from typing import Optional, Tuple, Sequence
 import pg3d.MatrixMath.matrix as mm
 from pg3d.camera import Camera
 from pg3d.triangle import Triangle
+from pg3d.point import Point
 
 
 class App:
@@ -15,7 +16,6 @@ class App:
         BG_COLOR=(0, 0, 0),
         LINE_COLOR=(255, 255, 255),
         VERTEX_SIZE=2,
-        stats=False,
         fullscreen=False,
         mouse_look=False,
     ):
@@ -45,10 +45,11 @@ class App:
             self.screen = pg.display.set_mode(self.dimensions, pg.RESIZABLE, vsync=1)
 
         self.half_width, self.half_height = self.width / 2, self.height / 2
-        self.FPS: int = 60
+        self.FPS = 60
         self.screen = pg.display.set_mode(self.dimensions, pg.RESIZABLE, vsync=1)
         self.clock = pg.time.Clock()
-        self.stats = stats
+        self.stats = False
+        self.check_stats = 0
 
         if mouse_look:
             pg.mouse.set_visible(0)
@@ -63,13 +64,13 @@ class App:
         self.mesh = []
 
         self.fov = 90
-        self.zf = 1000
-        self.zn = 0.1
+        self.z_far = 1000
+        self.z_near = 0.1
 
         m00 = (self.height / self.width) * (1 / m.tan(m.radians(self.fov / 2)))
         m11 = 1 / m.tan(m.radians(self.fov / 2))
-        m22 = self.zf / (self.zf - self.zn)
-        m32 = -self.zn * (self.zf / (self.zf - self.zn))
+        m22 = self.z_far / (self.z_far - self.z_near)
+        m32 = -self.z_near * (self.z_far / (self.z_far - self.z_near))
 
         self.projection_matrix = mm.Matrix(
             [[m00, 0, 0, 0], [0, m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
@@ -95,7 +96,7 @@ class App:
         Args:
             point ([Point]): [a point object]
         """
-        self.mesh.append([point])
+        self.mesh.append(point)
 
     def add_triangle(self, triangle):
         self.mesh.append(triangle)
@@ -105,33 +106,37 @@ class App:
 
         for shape in self.mesh:
             if type(shape) == Triangle:
-                shape.project()
+                shape._project()
 
-            else:
-                for point in shape:
-                    projected = point.project(
-                        self.projection_matrix, self.camera._cam_mat()
-                    )
+            elif type(shape) == Point:
+                projected = shape._project(
+                    self.projection_matrix, self.camera._cam_mat()
+                )
 
-                    if projected is not None:
-                        x, y, z = projected
+                if projected is not None:
+                    x, y, z = projected
 
-                        if point.vertex == True:
-                            pg.draw.circle(
-                                self.screen, self.LINE_COLOR, (x, y), self.VERTEX_SIZE
-                            )
+                    if shape._vertex == True:
+                        pg.draw.circle(
+                            self.screen, self.LINE_COLOR, (x, y), self.VERTEX_SIZE
+                        )
 
-    def _display_stats(self):
+    def display_stats(self):
         """
         If self.stats is true, this method will display stats on screen every frame
         """
-        font = pg.font.Font("freesansbold.ttf", 10)
-        fov = font.render(f"fov = {self.fov}", True, (0, 255, 0))
-        fps = font.render(f"fps = {round(self.clock.get_fps())}", True, (0, 255, 0))
-        dimensions = font.render(f"dimensions = {self.dimensions}", True, (0, 255, 0))
-        self.screen.blit(fov, (5, 5))
-        self.screen.blit(fps, (5, 15))
-        self.screen.blit(dimensions, (5, 25))
+        if self.stats == True:
+            bg = self.BG_COLOR
+            font_color = (255 - bg[0], 255 - bg[1], 255 - bg[2])
+            font = pg.font.Font("freesansbold.ttf", 10)
+            fov = font.render(f"fov = {self.fov}", True, font_color)
+            fps = font.render(f"fps = {round(self.clock.get_fps())}", True, font_color)
+            dimensions = font.render(
+                f"dimensions = {self.dimensions}", True, font_color
+            )
+            self.screen.blit(fov, (5, 5))
+            self.screen.blit(fps, (5, 15))
+            self.screen.blit(dimensions, (5, 25))
 
     def _check_events(self):
         for event in pg.event.get():
@@ -140,6 +145,15 @@ class App:
 
             elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 exit()
+
+            elif event.type == pg.KEYDOWN and event.key == pg.K_o:
+                if self.check_stats % 2 == 0:
+                    self.stats = True
+
+                else:
+                    self.stats = False
+
+                self.check_stats += 1
 
             elif event.type == pg.MOUSEWHEEL:
                 if event.y == 1:
@@ -154,7 +168,7 @@ class App:
                 self.half_width, self.half_height = self.width / 2, self.height / 2
                 self._update_projection_matrix()
 
-            elif (event.type == pg.MOUSEMOTION) and (self.mouse_look == True):
+            elif (self.mouse_look == True) and (event.type == pg.MOUSEMOTION):
                 self.camera._mouse_look(event.rel)
 
     def run(self):
@@ -165,8 +179,7 @@ class App:
             self._draw()
             self.camera._movement()
             self._check_events()
-            if self.stats:
-                self._display_stats()
+            self.display_stats()
 
             if self.mouse_look == True:
                 pg.mouse.set_pos((self.half_width, self.half_height))
