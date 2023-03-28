@@ -88,7 +88,7 @@ class App:
             [[m00, 0, 0, 0], [0, m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
         )
 
-    def _add_point(self, point):
+    def add_point(self, point):
         """
         When a user creates a point object this function is called and adds the point to mesh
 
@@ -97,7 +97,7 @@ class App:
         """
         self.mesh.append([point])
 
-    def _add_triangle(self, triangle):
+    def add_triangle(self, triangle):
         self.mesh.append(triangle)
 
     def _draw(self):
@@ -105,11 +105,11 @@ class App:
 
         for shape in self.mesh:
             if type(shape) == Triangle:
-                shape._project()
+                shape.project()
 
             else:
                 for point in shape:
-                    projected = point._project(
+                    projected = point.project(
                         self.projection_matrix, self.camera._cam_mat()
                     )
 

@@ -16,7 +16,7 @@ class Point:
         """
         self.coordinate = mm.Matrix([[*coordinate, 1]])
         self.app = app
-        self.app._add_point(self)
+        self.app.add_point(self)
         self.vertex = vertex
 
     def __repr__(self):
@@ -54,7 +54,7 @@ class Point:
         else:
             return "invalid position"
 
-    def _project(self, proj, cam):
+    def project(self, proj, cam):
         """
         projects point
 

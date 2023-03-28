@@ -18,16 +18,16 @@ class Triangle:
         ]
         self.projected_points = []
         self.app = app
-        self.app._add_triangle(self)
+        self.app.add_triangle(self)
 
-    def _project(self):
+    def project(self):
         """
         Projects triangle
         """
         self.projected_points = []
         for point in self.points:
-            projected = point._project(
-                self.app.projection_matrix, self.app.camera._cam_mat()
+            projected = point.project(
+                self.app.projection_matrix, self.app.camera.cam_mat()
             )
             if projected != None:
                 self.projected_points.append(projected)
@@ -45,8 +45,7 @@ class Triangle:
             )
 
     def __getitem__(self, index):
-        """AI is creating summary for __getitem__
-
+        """
         Args:
             index ([int]): [index of triangle]
 

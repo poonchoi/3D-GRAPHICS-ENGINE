@@ -9,7 +9,7 @@ class Shape:
         Args:
             app ([App]): [Specify app object]
             shape ([str]): [Specify shape]
-            size (int, optional): [Size of shape]. Defaults to 1.
+            size (float, optional): [Size of shape]. Defaults to 1.
             center (list, optional): [Center coordinate of shape]. Defaults to [0, 0, 0].
         """
         self.app = app

@@ -72,7 +72,7 @@ class Camera:
 
         return mm.Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [-x, -y, -z, 1]])
 
-    def _cam_mat(self):
+    def cam_mat(self):
         """
         Creates camera matrix
 
