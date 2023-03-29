@@ -13,8 +13,8 @@ class App:
         self,
         dimensions=(1000, 700),
         cam_pos=[0, 0, 0],
-        BG_COLOR=(0, 0, 0),
-        LINE_COLOR=(255, 255, 255),
+        BG_COLOR=None,
+        LINE_COLOR=None,
         VERTEX_SIZE=2,
         fullscreen=False,
         mouse_look=False,
@@ -52,12 +52,35 @@ class App:
         self.check_stats = 0
 
         if mouse_look:
-            pg.mouse.set_visible(0)
+            pg.mouse.set_visible(
+                0
+            )  # sets the mouse to invisible if mouse movement is turned on
+
         self.mouse_look = mouse_look
 
         self.BG_COLOR = BG_COLOR
         self.LINE_COLOR = LINE_COLOR
         self.VERTEX_SIZE = VERTEX_SIZE
+
+        if (self.BG_COLOR is None) and (
+            self.LINE_COLOR is not None
+        ):  # user inputs line color but not bg color
+            self.BG_COLOR = (
+                255 - self.LINE_COLOR[0],
+                255 - self.LINE_COLOR[1],
+                255 - self.LINE_COLOR[2],
+            )
+        elif (self.BG_COLOR is not None) and (
+            self.LINE_COLOR is None
+        ):  # user inputs bg color but not line color
+            self.LINE_COLOR = (
+                255 - self.BG_COLOR[0],
+                255 - self.BG_COLOR[1],
+                255 - self.BG_COLOR[2],
+            )
+        else:  # user inputs nothing for bg and line color
+            self.BG_COLOR = (0, 0, 0)
+            self.LINE_COLOR = (255, 255, 255)
 
         self.camera = Camera(cam_pos)
 
@@ -73,7 +96,7 @@ class App:
         m32 = -self.z_near * (self.z_far / (self.z_far - self.z_near))
 
         self.projection_matrix = mm.Matrix(
-            [[m00, 0, 0, 0], [0, m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
+            [[m00, 0, 0, 0], [0, -m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
         )
 
     def _update_projection_matrix(self):
@@ -86,7 +109,7 @@ class App:
         m32 = -self.z_near * (self.z_far / (self.z_far - self.z_near))
 
         self.projection_matrix = mm.Matrix(
-            [[m00, 0, 0, 0], [0, m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
+            [[m00, 0, 0, 0], [0, -m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
         )
 
     def add_point(self, point):

@@ -121,4 +121,4 @@ class Camera:
         """
         x, y = rel
         self.yaw(x / 1000)
-        self.pitch(-y / 1000)
+        self.pitch(y / 1000)

@@ -5,10 +5,13 @@ setup.cfg
 pg3d/__init__.py
 pg3d/app.py
 pg3d/camera.py
+pg3d/cube.py
 pg3d/matrices.py
 pg3d/model.py
 pg3d/point.py
+pg3d/pyramid.py
 pg3d/shape.py
+pg3d/tetrahedron.py
 pg3d/triangle.py
 pg3d.egg-info/PKG-INFO
 pg3d.egg-info/SOURCES.txt

@@ -41,7 +41,7 @@ class Triangle:
         if len(self.projected_points) == 3:
             a, b, c = self.projected_points
             pg.draw.polygon(
-                self.app.screen, self.app.LINE_COLOR, (a[:-1], b[:-1], c[:-1]), 1
+                self.app._screen, self.app.LINE_COLOR, (a[:-1], b[:-1], c[:-1]), 1
             )
 
     def __getitem__(self, index):

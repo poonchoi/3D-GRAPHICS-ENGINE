@@ -9,6 +9,9 @@ def zeroes(height, width):
     Returns:
         [Matrix]: [Matrix filled with zeroes]
     """
+    if type(height) != int or type(height) != int:
+        raise TypeError("height and width must be integer")
+
     return Matrix([[0 for w in range(width)] for h in range(height)])
 
 
@@ -19,6 +22,9 @@ def identity(n):
     Args:
         n ([int]): [size of square matrix]
     """
+    if type(n) != int:
+        raise TypeError("n must be integer")
+
     matrix = zeroes(n, n)
     for i in range(matrix.height):
         matrix[i][i] = 1
@@ -79,6 +85,10 @@ class Matrix:
             matrix ([list]): [2D array]
         """
         self._matrix = matrix
+
+        if type(self._matrix) != list:
+            raise TypeError("Matrix must be a list")
+
         self.width = len(self._matrix[0])
         self.height = len(self._matrix)
 
@@ -120,6 +130,9 @@ class Matrix:
             index ([int]): [position of matrix]
             value ([float]): [new value at position of matrix]
         """
+        if type(index) != int:
+            raise TypeError("Index must integer")
+
         self._matrix[index] = value
 
     def __getitem__(self, index):
@@ -137,6 +150,9 @@ class Matrix:
         Returns:
             [any]: [returns list or float]
         """
+        if type(index) != int:
+            raise TypeError("Index must integer")
+
         return self._matrix[index]
 
     def __rmul__(self, value):
@@ -149,9 +165,7 @@ class Matrix:
         Returns:
             [Matrix]: [Result of multiplication]
         """
-        if isinstance(value, int) or isinstance(
-            value, float
-        ):  # checks if the value is a number
+        if type(value) == int or type(value) == float:
             result = zeroes(self.height, self.width)
 
             # iterates through each number and multiplies it with the value
@@ -160,9 +174,8 @@ class Matrix:
                     result[height][width] = self._matrix[height][width] * value
 
             return result
-
         else:
-            return "ERROR OCCURRED"
+            raise TypeError("Index must integer or float")
 
     def __mul__(self, other):
         """
@@ -174,13 +187,13 @@ class Matrix:
         Result:
             [Matrix]: [Result of matrix multiplication]
         """
-        try:
-            if self.width == other.height:
-                return dot(self, other)
-            else:
-                return "COLUMNS OF MATRIX A MUST EQUAL ROWS OF MATRIX B"
-        except:
-            return "ERROR OCCURRED"
+        if type(other) != Matrix:
+            raise TypeError("Can only multiply with another Matrix object")
+
+        if self.width == other.height:
+            return dot(self, other)
+        else:
+            raise Exception("COLUMNS OF MATRIX A MUST EQUAL ROWS OF MATRIX B")
 
     def __add__(self, other):
         """
@@ -192,19 +205,17 @@ class Matrix:
         Result:
             [Matrix]: [Result of matrix addition]
         """
-        try:
-            if (self.height == other.height) and (self.width == other.width):
-                result = zeroes(self.height, self.width)
-                for height in range(self.height):
-                    for width in range(self.width):
-                        result[height][width] = (
-                            self[height][width] + other[height][width]
-                        )
-                return result
-            else:
-                return "CANNOT ADD MATRICES WITH DIFFERENT SHAPE"
-        except:
-            return "ERROR OCCURRED"
+        if type(other) != Matrix:
+            raise TypeError("Can only add with another Matrix object")
+
+        if (self.height == other.height) and (self.width == other.width):
+            result = zeroes(self.height, self.width)
+            for height in range(self.height):
+                for width in range(self.width):
+                    result[height][width] = self[height][width] + other[height][width]
+            return result
+        else:
+            raise Exception("CANNOT ADD MATRICES WITH DIFFERENT SHAPE")
 
     def __sub__(self, other):
         """
@@ -216,19 +227,17 @@ class Matrix:
         Result:
             [Matrix]: [Result of matrix subtraction]
         """
-        try:
-            if (self.height == other.height) and (self.width == other.width):
-                result = zeroes(self.height, self.width)
-                for height in range(self.height):
-                    for width in range(self.width):
-                        result[height][width] = (
-                            self[height][width] - other[height][width]
-                        )
-                return result
-            else:
-                return "CANNOT SUBTRACT MATRICES WITH DIFFERENT SHAPE"
-        except:
-            return "ERROR OCCURRED"
+        if type(other) != Matrix:
+            raise TypeError("Can only subtract with another Matrix object")
+
+        if (self.height == other.height) and (self.width == other.width):
+            result = zeroes(self.height, self.width)
+            for height in range(self.height):
+                for width in range(self.width):
+                    result[height][width] = self[height][width] - other[height][width]
+            return result
+        else:
+            raise Exception("CANNOT SUBTRACT MATRICES WITH DIFFERENT SHAPE")
 
     def transpose(self):
         """
@@ -252,6 +261,9 @@ class Matrix:
         Returns:
             [Matrix]: [matrix without specified row and column]
         """
+        if type(i) != int or type(i) != int:
+            raise TypeError("i and j must be integer")
+
         if self.is_square():
             # removes the i-th row and j-th column using slicing
             return Matrix(
@@ -262,7 +274,7 @@ class Matrix:
             )
 
         else:
-            print("CANNOT FIND MINOR OF NON-SQUARE MATRIX")
+            raise Exception("CANNOT FIND MINOR OF NON-SQUARE MATRIX")
 
     def determinant(self):
         """
@@ -288,7 +300,7 @@ class Matrix:
 
             return determinant
         else:
-            print("CANNOT FIND DETERMINANT OF A NON-SQUARE MATRIX")
+            raise Exception("CANNOT FIND DETERMINANT OF A NON-SQUARE MATRIX")
 
     def inverse(self):
         """
@@ -299,12 +311,12 @@ class Matrix:
         """
         # check if matrix isnt square
         if not self.is_square():
-            print("CANNOT FIND INVERSE OF NON-SQUARE MATRIX")
+            raise Exception("CANNOT FIND INVERSE OF NON-SQUARE MATRIX")
 
         else:
             # check if matrix determinat is equal to 0
             if self.determinant == 0:
-                print("CANNOT FIND INVERSE OF MATRIX WITH DETERMINANT = 0")
+                raise Exception("CANNOT FIND INVERSE OF MATRIX WITH DETERMINANT = 0")
 
             # if both conditions are not met, the inverse will be calculated
             else:
