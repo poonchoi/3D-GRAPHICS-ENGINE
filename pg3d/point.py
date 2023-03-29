@@ -75,7 +75,7 @@ class Point:
             y /= w
             z /= w
             if (x < 2 and x > -2) and (y < 2 and y > -2):
-                x, y = (x + 1) * self.app.half_width, (y + 1) * self.app.half_height
+                x, y = (x + 1) * self.app._half_width, (y + 1) * self.app._half_height
                 return (x, y, z)
             else:
                 return None

@@ -10,7 +10,7 @@ class Model:
             path ([str]): [path of .obj file]
         """
         self.app = app
-        self.path = path
+        self._path = path
         self._generate_model()
 
     def _generate_model(self):
@@ -18,7 +18,7 @@ class Model:
         Gets vertex and triangle information from .obj file and creates the necessary triangles and points
         """
         vertices, triangles = [], []
-        with open(self.path) as file:
+        with open(self._path) as file:
             for line in file:
                 if line.startswith("v "):
                     vertices.append([float(i) for i in line.split()[1:]])

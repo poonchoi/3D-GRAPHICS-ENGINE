@@ -5,21 +5,18 @@ import math as m
 
 
 class Camera:
-    def __init__(self, app, position, forward=[0, 0, 1], up=[0, 1, 0], right=[1, 0, 0]):
+    def __init__(self, position, forward=[0, 0, 1], up=[0, 1, 0], right=[1, 0, 0]):
         """
         Args:
-            app ([App]): [App instance]
             position ([list]): [Starting position of camera]
             forward ([list], optional): [Orientation along z-axis]. Defaults to [0, 0, 1].
             up ([list], optional): [Orientation along y-axis]. Defaults to [0, 1, 0].
             right ([list], optional): [Orientation along x-axis]. Defaults to [1, 0, 0].
         """
-        self.app = app
-
         self.pos = mm.Matrix([[*position, 1]])
-        self.forward = mm.Matrix([[*forward, 1]])
-        self.up = mm.Matrix([[*up, 1]])
-        self.right = mm.Matrix([[*right, 1]])
+        self._forward = mm.Matrix([[*forward, 1]])
+        self._up = mm.Matrix([[*up, 1]])
+        self._right = mm.Matrix([[*right, 1]])
 
         self.speed = 1
         self.angle = m.radians(1)
@@ -31,9 +28,9 @@ class Camera:
         Args:
             angle ([float]): [Angle used to rotate camera orientation]
         """
-        self.up *= rotate_y(angle)
-        self.forward *= rotate_y(angle)
-        self.right *= rotate_y(angle)
+        self._up *= rotate_y(angle)
+        self._forward *= rotate_y(angle)
+        self._right *= rotate_y(angle)
 
     def pitch(self, angle):
         """
@@ -42,9 +39,9 @@ class Camera:
         Args:
             angle ([float]): [Angle used to rotate camera orientation]
         """
-        self.up *= rotate_x(angle)
-        self.forward *= rotate_x(angle)
-        self.right *= rotate_x(angle)
+        self._up *= rotate_x(angle)
+        self._forward *= rotate_x(angle)
+        self._right *= rotate_x(angle)
 
     def _rot_mat(self):
         """
@@ -53,9 +50,9 @@ class Camera:
         Returns:
             [Matrix]: [Rotation matrix used to rotate all point in world space around camera]
         """
-        fx, fy, fz, fw = self.forward[0]
-        rx, ry, rz, rw = self.right[0]
-        ux, uy, uz, uw = self.up[0]
+        fx, fy, fz, fw = self._forward[0]
+        rx, ry, rz, rw = self._right[0]
+        ux, uy, uz, uw = self._up[0]
 
         return mm.Matrix(
             [[rx, ux, fx, 0], [ry, uy, fy, 0], [rz, uz, fz, 0], [0, 0, 0, 1]]
@@ -88,23 +85,23 @@ class Camera:
         key = pg.key.get_pressed()
 
         if key[pg.K_a]:
-            self.right = self.speed * self.right
-            self.pos = self.pos - self.right
+            self._right = self.speed * self._right
+            self.pos = self.pos - self._right
         if key[pg.K_d]:
-            self.right = self.speed * self.right
-            self.pos = self.pos + self.right
+            self._right = self.speed * self._right
+            self.pos = self.pos + self._right
         if key[pg.K_w]:
-            self.forward = self.speed * self.forward
-            self.pos = self.pos + self.forward
+            self._forward = self.speed * self._forward
+            self.pos = self.pos + self._forward
         if key[pg.K_s]:
-            self.forward = self.speed * self.forward
-            self.pos = self.pos - self.forward
+            self._forward = self.speed * self._forward
+            self.pos = self.pos - self._forward
         if key[pg.K_q]:
-            self.up = self.speed * self.up
-            self.pos = self.pos + self.up
+            self._up = self.speed * self._up
+            self.pos = self.pos + self._up
         if key[pg.K_e]:
-            self.up = self.speed * self.up
-            self.pos = self.pos - self.up
+            self._up = self.speed * self._up
+            self.pos = self.pos - self._up
 
         if key[pg.K_LEFT]:
             self.yaw(-self.angle)

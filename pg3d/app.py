@@ -35,19 +35,19 @@ class App:
         pg.init()
 
         if fullscreen:
-            self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN, vsync=1)
-            self.dimensions = (
-                self.width,
-                self.height,
+            self._screen = pg.display.set_mode((0, 0), pg.FULLSCREEN, vsync=1)
+            self._dimensions = (
+                self._width,
+                self._height,
             ) = pg.display.get_surface().get_size()
         else:
-            self.dimensions = self.width, self.height = dimensions
-            self.screen = pg.display.set_mode(self.dimensions, pg.RESIZABLE, vsync=1)
+            self._dimensions = self._width, self._height = dimensions
+            self._screen = pg.display.set_mode(self._dimensions, pg.RESIZABLE, vsync=1)
 
-        self.half_width, self.half_height = self.width / 2, self.height / 2
+        self._half_width, self._half_height = self._width / 2, self._height / 2
         self.FPS = 60
-        self.screen = pg.display.set_mode(self.dimensions, pg.RESIZABLE, vsync=1)
-        self.clock = pg.time.Clock()
+        self._screen = pg.display.set_mode(self._dimensions, pg.RESIZABLE, vsync=1)
+        self._clock = pg.time.Clock()
         self.stats = False
         self.check_stats = 0
 
@@ -59,7 +59,7 @@ class App:
         self.LINE_COLOR = LINE_COLOR
         self.VERTEX_SIZE = VERTEX_SIZE
 
-        self.camera = Camera(self, cam_pos)
+        self.camera = Camera(cam_pos)
 
         self.mesh = []
 
@@ -67,7 +67,7 @@ class App:
         self.z_far = 1000
         self.z_near = 0.1
 
-        m00 = (self.height / self.width) * (1 / m.tan(m.radians(self.fov / 2)))
+        m00 = (self._height / self._width) * (1 / m.tan(m.radians(self.fov / 2)))
         m11 = 1 / m.tan(m.radians(self.fov / 2))
         m22 = self.z_far / (self.z_far - self.z_near)
         m32 = -self.z_near * (self.z_far / (self.z_far - self.z_near))
@@ -80,10 +80,10 @@ class App:
         """
         Updates the projection matrix when the values of fov and aspect ratio are changed by the user
         """
-        m00 = (self.height / self.width) * (1 / m.tan(m.radians(self.fov / 2)))
+        m00 = (self._height / self._width) * (1 / m.tan(m.radians(self.fov / 2)))
         m11 = 1 / m.tan(m.radians(self.fov / 2))
-        m22 = self.zf / (self.zf - self.zn)
-        m32 = -self.zn * (self.zf / (self.zf - self.zn))
+        m22 = self.z_far / (self.z_far - self.z_near)
+        m32 = -self.z_near * (self.z_far / (self.z_far - self.z_near))
 
         self.projection_matrix = mm.Matrix(
             [[m00, 0, 0, 0], [0, m11, 0, 0], [0, 0, m22, 1], [0, 0, m32, 0]]
@@ -102,7 +102,7 @@ class App:
         self.mesh.append(triangle)
 
     def _draw(self):
-        self.screen.fill(self.BG_COLOR)
+        self._screen.fill(self.BG_COLOR)
 
         for shape in self.mesh:
             if type(shape) == Triangle:
@@ -118,7 +118,7 @@ class App:
 
                     if shape._vertex == True:
                         pg.draw.circle(
-                            self.screen, self.LINE_COLOR, (x, y), self.VERTEX_SIZE
+                            self._screen, self.LINE_COLOR, (x, y), self.VERTEX_SIZE
                         )
 
     def display_stats(self):
@@ -130,13 +130,13 @@ class App:
             font_color = (255 - bg[0], 255 - bg[1], 255 - bg[2])
             font = pg.font.Font("freesansbold.ttf", 10)
             fov = font.render(f"fov = {self.fov}", True, font_color)
-            fps = font.render(f"fps = {round(self.clock.get_fps())}", True, font_color)
+            fps = font.render(f"fps = {round(self._clock.get_fps())}", True, font_color)
             dimensions = font.render(
-                f"dimensions = {self.dimensions}", True, font_color
+                f"dimensions = {self._dimensions}", True, font_color
             )
-            self.screen.blit(fov, (5, 5))
-            self.screen.blit(fps, (5, 15))
-            self.screen.blit(dimensions, (5, 25))
+            self._screen.blit(fov, (5, 5))
+            self._screen.blit(fps, (5, 15))
+            self._screen.blit(dimensions, (5, 25))
 
     def _check_events(self):
         for event in pg.event.get():
@@ -163,9 +163,9 @@ class App:
                 self._update_projection_matrix()
 
             elif event.type == pg.VIDEORESIZE:
-                self.screen = pg.display.set_mode((event.w, event.h), pg.RESIZABLE)
-                self.dimensions = self.width, self.height = (event.w, event.h)
-                self.half_width, self.half_height = self.width / 2, self.height / 2
+                self._screen = pg.display.set_mode((event.w, event.h), pg.RESIZABLE)
+                self._dimensions = self._width, self._height = (event.w, event.h)
+                self._half_width, self._half_height = self._width / 2, self._height / 2
                 self._update_projection_matrix()
 
             elif (self.mouse_look == True) and (event.type == pg.MOUSEMOTION):
@@ -182,8 +182,8 @@ class App:
             self.display_stats()
 
             if self.mouse_look == True:
-                pg.mouse.set_pos((self.half_width, self.half_height))
+                pg.mouse.set_pos((self._half_width, self._half_height))
 
-            pg.display.set_caption(f"{round(self.clock.get_fps())} FPS")
+            pg.display.set_caption(f"{round(self._clock.get_fps())} FPS")
             pg.display.update()
-            self.clock.tick(self.FPS)
+            self._clock.tick(self.FPS)
