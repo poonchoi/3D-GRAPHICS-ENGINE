@@ -11,6 +11,15 @@ class Triangle:
             app ([App]): [Specify App object]
             vertices ([list[list]]): [list with 3 cartesian coordinates]
         """
+        if not isinstance(vertices, list) and not isinstance(vertices, tuple):
+            raise Exception("vertices must be list or tuple")
+
+        if not isinstance(vertices[0], list) and not isinstance(vertices[0], tuple):
+            raise Exception("vertices must be 2D list or tuple")
+
+        if len(vertices) != 3:
+            raise Exception("vertices must contain 3 coordinates")
+
         self.points = [
             Point(app, vertices[0], False),
             Point(app, vertices[1], False),

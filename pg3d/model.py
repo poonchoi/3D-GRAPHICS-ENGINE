@@ -9,6 +9,8 @@ class Model:
             app ([App]): [instance of App class]
             path ([str]): [path of .obj file]
         """
+        if not isinstance(path, str):
+            raise Exception("Path must be string")
         self.app = app
         self._path = path
         self._generate_model()

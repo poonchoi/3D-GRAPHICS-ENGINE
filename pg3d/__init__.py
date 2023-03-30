@@ -5,4 +5,3 @@ from pg3d.cube import Cube
 from pg3d.pyramid import Pyramid
 from pg3d.tetrahedron import Tetrahedron
 from pg3d.model import Model
-from pg3d.MatrixMath import matrix as mm

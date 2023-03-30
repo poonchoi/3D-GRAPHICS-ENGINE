@@ -44,6 +44,7 @@ class Cube(Shape):
             [7, 5, 4],  # Back face
         ]
 
+        # creates the triangles
         if (triangles != None) and (vertices != None):
             for triangle in triangles:
                 Triangle(

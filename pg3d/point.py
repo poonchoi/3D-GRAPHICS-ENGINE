@@ -2,7 +2,6 @@ import pygame as pg
 import pg3d.MatrixMath.matrix as mm
 import math as m
 from pygame.colordict import THECOLORS
-from pg3d.app import App as apptype
 
 
 class Point:
@@ -15,13 +14,13 @@ class Point:
             coordinate ([list]): [coordinate of point]
             vertex (bool, optional): [flag that says whether point is drawn]. Defaults to True.
         """
-        if type(app) != apptype:
-            raise Exception("You must input app object")
-        if type(coordinate) != list:
-            raise Exception("Coordinate must be list")
+        if not isinstance(coordinate, list) and not isinstance(coordinate, tuple):
+            raise Exception("Coordinate must be list or tuple")
+
         if len(coordinate) > 3:
-            raise Exception("Coordinate must have 3 items")
-        if type(vertex) != bool:
+            raise Exception("Coordinate must have 3 numbers")
+
+        if not isinstance(vertex, bool):
             raise Exception("Vertex type must be bool")
 
         self.coordinate = mm.Matrix([[*coordinate, 1]])

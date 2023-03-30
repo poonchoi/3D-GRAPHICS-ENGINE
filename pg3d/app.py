@@ -32,6 +32,38 @@ class App:
             fullscreen ([bool], optional): [makes screen fullscreen]. Defaults to False.
             mouse_look ([bool], optional): [use mouse movement too look with camera]. Defaults to False.
         """
+        if not isinstance(dimensions, list) and not isinstance(dimensions, tuple):
+            raise Exception("dimensions must be list or tuple")
+
+        if isinstance(dimensions[0], list) or isinstance(dimensions[0], tuple):
+            raise Exception("dimensions cannot be larger than 1D")
+
+        if not (len(dimensions) == 2):
+            raise Exception("dimensions must contain 2 values")
+
+        if not isinstance(cam_pos, list) and not isinstance(cam_pos, tuple):
+            raise Exception("cam_pos must be list or tuple")
+
+        if isinstance(cam_pos[0], list) or isinstance(cam_pos[0], tuple):
+            raise Exception("cam_pos cannot be larger than 1D")
+
+        if not (len(cam_pos) == 3):
+            raise Exception("cam_pos must contain 3 values")
+
+        if not isinstance(VERTEX_SIZE, int):
+            raise Exception("VERTEX_SIZE must be int")
+
+        if (
+            not not isinstance(BG_COLOR, bool)
+            and not isinstance(BG_COLOR, list)
+            and not isinstance(BG_COLOR, tuple)
+        ) or (
+            not not isinstance(LINE_COLOR, bool)
+            and not isinstance(LINE_COLOR, list)
+            and not isinstance(LINE_COLOR, tuple)
+        ):
+            raise Exception("BG_COLOR and LINE_COLOR must be either list or tuple")
+
         pg.init()
 
         if fullscreen:
@@ -128,10 +160,10 @@ class App:
         self._screen.fill(self.BG_COLOR)
 
         for shape in self.mesh:
-            if type(shape) == Triangle:
+            if isinstance(shape, Triangle):
                 shape._project()
 
-            elif type(shape) == Point:
+            elif isinstance(shape, Point):
                 projected = shape._project(
                     self.projection_matrix, self.camera._cam_mat()
                 )
