@@ -3,10 +3,8 @@ from pg3d.triangle import Triangle
 
 
 class Pyramid(Shape):
-    def __init__(self, app, size=1, center=[0, 0, 0], height=1):
+    def __init__(self, app, size=1, center=[0, 0, 0]):
         super().__init__(app, size, center)
-
-        self._height = height
 
         self._generate_shape()
 
@@ -25,7 +23,7 @@ class Pyramid(Shape):
             [x - half_size, y - half_size, z + half_size],  # Bottom-front-left
             [x + half_size, y - half_size, z - half_size],  # Bottom-back-right
             [x + half_size, y - half_size, z + half_size],  # Bottom-front-right
-            [x, y + self._height, z],  # Top
+            [x, y + self._size, z],  # Top
         ]
 
         triangles = [

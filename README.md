@@ -42,12 +42,11 @@ App(kwargs):
 kwargs:
     dimensions=(1000, 700)
     cam_pos=[0, 0, 0]
-    BG_COLOR=(0, 0, 0)
-    LINE_COLOR=(255, 255, 255) 
+    BG_COLOR=None
+    LINE_COLOR=None
     VERTEX_SIZE=2              
-    stats=False                # Show stats on screen
     fullscreen=False           
-    mouse_look=False           # Use mouse for camera orientation
+    mouse_look=False  # Use mouse for camera orientation
 
 
 functions:
@@ -64,18 +63,42 @@ args:
 ```
 ---
 ```py
-Shape(args, kwargs)
+Pyramid(args, kwargs)
 
 
 args:
-    app    # Specify the App() object
-    shape  # "cube" | "pyramid" | "tetrahedron"
+    app  # Specify the App() object
 
 
 kwargs:
     size=1
     center=[0, 0, 0]
-    width=1
+```
+---
+```py
+Cube(args, kwargs)
+
+
+args:
+    app  # Specify the App() object
+
+
+kwargs:
+    size=1
+    center=[0, 0, 0]
+```
+---
+```py
+Tetrahedron(args, kwargs)
+
+
+args:
+    app  # Specify the App() object
+
+
+kwargs:
+    size=1
+    center=[0, 0, 0]
 ```
 ---
 ```py
@@ -108,27 +131,4 @@ functions:
     __repr__()                 # Prints Point object
     __setitem__(index, value)  # Sets indexed coordinate of Point object to value
     __getitem__(index)         # Returns indexed coordinate of Point object
-```
----
-```py
-Matrix(args)
-
-
-args:
-    matrix  # A 2D array
-
-
-functions:
-    __repr__()                 # Prints a Matrix object
-    __setitem__(index, value)  # Sets indexed value of Matrix object to value
-    __getitem__(index)         # Returns value of indexed Matrix object
-    __rmul__(value)            # Returns product of Matrix object and number
-    __mul__(other)             # Multiplies 2 matrices together
-    __add__(other)             # Adds 2 matrices together
-    __sub__(other)             # Subtracts 2 matrices together
-    transpose()                # Transposes Matrix object
-    determinant()              # Finds determinant of Matrix object
-    inverse()                  # Finds inverse of Matrix object
-    is_square()                # Checks whether matrix is square or not
-
 ```

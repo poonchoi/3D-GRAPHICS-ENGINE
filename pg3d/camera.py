@@ -108,9 +108,9 @@ class Camera:
         if key[pg.K_RIGHT]:
             self.yaw(self.angle)
         if key[pg.K_UP]:
-            self.pitch(self.angle)
-        if key[pg.K_DOWN]:
             self.pitch(-self.angle)
+        if key[pg.K_DOWN]:
+            self.pitch(self.angle)
 
     def _mouse_look(self, rel):
         """
