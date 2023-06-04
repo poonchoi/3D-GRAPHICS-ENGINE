@@ -1,3 +1,9 @@
+tests/
+setup.cfg
+pyproject.toml
+pg3d.egg-info/
+dist/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
